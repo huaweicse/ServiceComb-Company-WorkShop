@@ -30,6 +30,17 @@
     <java.version>1.8</java.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.seanyinx</groupId>
+        <artifactId>unit-scaffolding</artifactId>
+        <version>1.0.0</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -39,7 +50,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-
   </build>
 
 

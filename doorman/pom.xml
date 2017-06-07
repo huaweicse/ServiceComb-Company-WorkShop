@@ -28,6 +28,11 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.seanyinx</groupId>
+      <artifactId>unit-scaffolding</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

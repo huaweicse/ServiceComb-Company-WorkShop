@@ -15,15 +15,18 @@
  */
 package io.servicecomb.company.auth;
 
-public class UserSession {
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-  private String username;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-  public UserSession(String username) {
-    this.username = username;
-  }
+@ControllerAdvice
+class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
 
-  public String getUsername() {
-    return username;
+  @ExceptionHandler(UnauthorizedAccessException.class)
+  ResponseEntity<String> handleException(UnauthorizedAccessException e) {
+    return new ResponseEntity<>(e.getMessage(), FORBIDDEN);
   }
 }

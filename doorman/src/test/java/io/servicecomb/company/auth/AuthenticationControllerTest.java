@@ -52,7 +52,7 @@ public class AuthenticationControllerTest {
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
     when(authenticationService.authenticate(username, password))
-        .thenReturn(new UserSession(username));
+        .thenReturn(new User(username));
 
     when(tokenStore.generate(username)).thenReturn(token);
 

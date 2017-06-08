@@ -15,20 +15,28 @@
  */
 package io.servicecomb.company.auth;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@Configuration
-class AuthenticationConfig {
+@Entity
+class User {
 
-  @Bean
-  AuthenticationService authenticationService(UserSessionRepository repository) {
-    return new AuthenticationServiceImpl(repository);
+  @Id
+  private long id;
+  private String username;
+  private String password;
+  private Date lastAccessedTime;
+
+  User() {
   }
 
-  @Bean
-  TokenStore tokenStore(@Value("${company.auth.secret}") String secretKey) {
-    return new JwtTokenStore(secretKey);
+  User(String username) {
+    this.username = username;
+    this.lastAccessedTime = new Date();
+  }
+
+  public String getUsername() {
+    return username;
   }
 }

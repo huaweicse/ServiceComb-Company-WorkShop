@@ -41,8 +41,8 @@ class AuthenticationController {
   String login(
       @RequestParam(USERNAME) String username,
       @RequestParam(PASSWORD) String password) {
-    UserSession userSession = authenticationService.authenticate(username, password);
+    User user = authenticationService.authenticate(username, password);
 
-    return tokenStore.generate(userSession.getUsername());
+    return tokenStore.generate(user.getUsername());
   }
 }

@@ -15,22 +15,39 @@
  */
 package io.servicecomb.company.auth;
 
+import static com.seanyinx.github.unit.scaffolding.AssertUtils.expectFailing;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class AuthenticationServiceImplTest {
 
   private final String username = uniquify("username");
   private final String password = uniquify("password");
 
-  private final AuthenticationService authenticationService = new AuthenticationServiceImpl();
+  private final UserSessionRepository repository = Mockito.mock(UserSessionRepository.class);
+  private final AuthenticationService authenticationService = new AuthenticationServiceImpl(repository);
 
   @Test
   public void authenticateUserWithUsernameAndPassword() {
-    UserSession session = authenticationService.authenticate(username, password);
+    when(repository.findByUsernameAndPassword(username, password))
+        .thenReturn(new User(username));
+
+    User session = authenticationService.authenticate(username, password);
 
     assertThat(session.getUsername()).isEqualTo(username);
+  }
+
+  @Test
+  public void blowsUpWhenUserIsInvalid() {
+    try {
+      authenticationService.authenticate(username, password);
+      expectFailing(UnauthorizedAccessException.class);
+    } catch (UnauthorizedAccessException e) {
+      assertThat(e.getMessage()).isEqualTo("No user matches username " + username + " and password");
+    }
   }
 }

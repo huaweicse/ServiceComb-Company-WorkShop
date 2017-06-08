@@ -15,20 +15,8 @@
  */
 package io.servicecomb.company.auth;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.data.repository.CrudRepository;
 
-@Configuration
-class AuthenticationConfig {
-
-  @Bean
-  AuthenticationService authenticationService(UserSessionRepository repository) {
-    return new AuthenticationServiceImpl(repository);
-  }
-
-  @Bean
-  TokenStore tokenStore(@Value("${company.auth.secret}") String secretKey) {
-    return new JwtTokenStore(secretKey);
-  }
+interface UserSessionRepository extends CrudRepository<User, Long> {
+  User findByUsernameAndPassword(String username, String password);
 }

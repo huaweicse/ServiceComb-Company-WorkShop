@@ -43,14 +43,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 public class AuthenticationIntegrationTest {
 
+  private static final String password = "password";
+  private static final String username = "jordan";
+
   @Autowired
   private MockMvc mockMvc;
 
   @Value("${company.auth.secret}")
   private String secretKey;
-
-  private final String password = uniquify("password");
-  private final String username = uniquify("username");
 
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
@@ -72,5 +72,15 @@ public class AuthenticationIntegrationTest {
     assertThat(token.getExpiration())
         .isAfterOrEqualsTo(Date.from(loginTime.plusDays(1).toInstant()))
         .isBeforeOrEqualsTo(Date.from(ZonedDateTime.now().plusDays(1).toInstant()));
+  }
+
+  @Test
+  public void forbidsAccessOfInvalidUser() throws Exception {
+    mockMvc.perform(
+        MockMvcRequestBuilders.post("/login")
+            .contentType(APPLICATION_FORM_URLENCODED)
+            .param(USERNAME, uniquify("invalid-user"))
+            .param(PASSWORD, uniquify("password")))
+        .andExpect(status().isForbidden());
   }
 }

@@ -17,8 +17,20 @@ package io.servicecomb.company.auth;
 
 class AuthenticationServiceImpl implements AuthenticationService {
 
+  private final UserSessionRepository repository;
+
+  AuthenticationServiceImpl(UserSessionRepository repository) {
+    this.repository = repository;
+  }
+
   @Override
-  public UserSession authenticate(String username, String password) {
-    return new UserSession(username);
+  public User authenticate(String username, String password) {
+    User session = repository.findByUsernameAndPassword(username, password);
+
+    if (session == null) {
+      throw new UnauthorizedAccessException("No user matches username " + username + " and password");
+    }
+
+    return session;
   }
 }

@@ -44,7 +44,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
   public String validate(String token) {
     try {
       return tokenStore.parse(token);
-    } catch (IllegalArgumentException | JwtException e) {
+    } catch (TokenException e) {
       throw new UnauthorizedAccessException("No user matches such a token " + token);
     }
   }

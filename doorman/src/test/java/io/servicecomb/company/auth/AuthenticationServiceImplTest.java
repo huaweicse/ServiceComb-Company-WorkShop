@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.jsonwebtoken.MalformedJwtException;
 import org.junit.Test;
 
 public class AuthenticationServiceImplTest {
@@ -68,7 +67,7 @@ public class AuthenticationServiceImplTest {
 
   @Test
   public void blowsUpWhenTokenMatchesNoUser() {
-    when(tokenStore.parse(token)).thenThrow(new MalformedJwtException(uniquify("blah")));
+    when(tokenStore.parse(token)).thenThrow(new TokenException());
 
     try {
       authenticationService.validate(token);

@@ -19,7 +19,6 @@ import static com.seanyinx.github.unit.scaffolding.AssertUtils.expectFailing;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
@@ -49,8 +48,8 @@ public class JwtTokenStoreTest {
 
     try {
       tokenStore.parse(token);
-      expectFailing(ExpiredJwtException.class);
-    } catch (ExpiredJwtException ignored) {
+      expectFailing(TokenException.class);
+    } catch (TokenException ignored) {
     }
   }
 }

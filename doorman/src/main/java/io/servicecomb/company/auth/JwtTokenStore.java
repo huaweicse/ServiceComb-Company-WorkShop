@@ -17,6 +17,7 @@ package io.servicecomb.company.auth;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -42,10 +43,14 @@ class JwtTokenStore implements TokenStore {
 
   @Override
   public String parse(String token) {
-    return Jwts.parser()
-        .setSigningKey(secretKey)
-        .parseClaimsJws(token)
-        .getBody()
-        .getSubject();
+    try {
+      return Jwts.parser()
+          .setSigningKey(secretKey)
+          .parseClaimsJws(token)
+          .getBody()
+          .getSubject();
+    } catch (JwtException | IllegalArgumentException e) {
+      throw new TokenException(e);
+    }
   }
 }

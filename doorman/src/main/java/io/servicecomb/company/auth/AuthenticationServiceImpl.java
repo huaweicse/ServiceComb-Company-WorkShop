@@ -15,41 +15,37 @@
  */
 package io.servicecomb.company.auth;
 
+import io.jsonwebtoken.JwtException;
+
 class AuthenticationServiceImpl implements AuthenticationService {
 
   private final TokenStore tokenStore;
   private final UserRepository userRepository;
-  private final UserSessionRepository sessionRepository;
 
   AuthenticationServiceImpl(
       TokenStore tokenStore,
-      UserRepository userRepository,
-      UserSessionRepository sessionRepository) {
+      UserRepository userRepository) {
     this.tokenStore = tokenStore;
     this.userRepository = userRepository;
-    this.sessionRepository = sessionRepository;
   }
 
   @Override
-  public UserSession authenticate(String username, String password) {
+  public String authenticate(String username, String password) {
     User user = userRepository.findByUsernameAndPassword(username, password);
 
     if (user == null) {
       throw new UnauthorizedAccessException("No user matches username " + username + " and password");
     }
 
-    UserSession session = new UserSession(tokenStore.generate(username), user);
-    sessionRepository.save(session);
-    return session;
+    return tokenStore.generate(username);
   }
 
   @Override
-  public User validate(String token) {
-    UserSession session = sessionRepository.findByToken(token);
-    if (session == null) {
+  public String validate(String token) {
+    try {
+      return tokenStore.parse(token);
+    } catch (IllegalArgumentException | JwtException e) {
       throw new UnauthorizedAccessException("No user matches such a token " + token);
     }
-
-    return session.getUser();
   }
 }

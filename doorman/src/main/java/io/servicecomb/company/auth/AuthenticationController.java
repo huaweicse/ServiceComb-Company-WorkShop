@@ -41,13 +41,13 @@ class AuthenticationController {
       @RequestParam(USERNAME) String username,
       @RequestParam(PASSWORD) String password) {
 
-    return authenticationService.authenticate(username, password).getToken();
+    return authenticationService.authenticate(username, password);
   }
 
   @RequestMapping("/validate")
   @ResponseBody
   String validate(@RequestParam(TOKEN) String token) {
 
-    return authenticationService.validate(token).getUsername();
+    return authenticationService.validate(token);
   }
 }

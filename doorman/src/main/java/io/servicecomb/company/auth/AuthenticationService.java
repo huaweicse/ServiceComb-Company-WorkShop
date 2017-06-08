@@ -15,7 +15,7 @@ package io.servicecomb.company.auth;/*
  */
 
 public interface AuthenticationService {
-  UserSession authenticate(String username, String password);
+  String authenticate(String username, String password);
 
-  User validate(String token);
+  String validate(String token);
 }

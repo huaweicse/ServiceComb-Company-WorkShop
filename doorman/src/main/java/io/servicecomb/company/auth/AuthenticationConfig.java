@@ -22,17 +22,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class AuthenticationConfig {
 
+  private static final int SECONDS_OF_A_DAY = 24 * 60 * 60;
+
   @Bean
   AuthenticationService authenticationService(
       TokenStore tokenStore,
-      UserRepository repository,
-      UserSessionRepository sessionRepository) {
+      UserRepository repository) {
 
-    return new AuthenticationServiceImpl(tokenStore, repository, sessionRepository);
+    return new AuthenticationServiceImpl(tokenStore, repository);
   }
 
   @Bean
   TokenStore tokenStore(@Value("${company.auth.secret}") String secretKey) {
-    return new JwtTokenStore(secretKey);
+    return new JwtTokenStore(secretKey, SECONDS_OF_A_DAY);
   }
 }

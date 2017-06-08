@@ -24,16 +24,18 @@ import java.util.Date;
 class JwtTokenStore implements TokenStore {
 
   private final String secretKey;
+  private final int secondsToExpire;
 
-  JwtTokenStore(String secretKey) {
+  JwtTokenStore(String secretKey, int secondsToExpire) {
     this.secretKey = secretKey;
+    this.secondsToExpire = secondsToExpire;
   }
 
   @Override
   public String generate(String username) {
     return Jwts.builder()
         .setSubject(username)
-        .setExpiration(Date.from(ZonedDateTime.now().plusDays(1).toInstant()))
+        .setExpiration(Date.from(ZonedDateTime.now().plusSeconds(secondsToExpire).toInstant()))
         .signWith(HS512, secretKey)
         .compact();
   }

@@ -19,9 +19,9 @@ import static com.seanyinx.github.unit.scaffolding.AssertUtils.expectFailing;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.jsonwebtoken.MalformedJwtException;
 import org.junit.Test;
 
 public class AuthenticationServiceImplTest {
@@ -31,11 +31,10 @@ public class AuthenticationServiceImplTest {
   private final User user = new User(username);
 
   private final TokenStore tokenStore = mock(TokenStore.class);
-  private final UserSessionRepository sessionRepository = mock(UserSessionRepository.class);
   private final UserRepository userRepository = mock(UserRepository.class);
 
   private final AuthenticationService authenticationService = new AuthenticationServiceImpl(
-      tokenStore, userRepository, sessionRepository);
+      tokenStore, userRepository);
   private String token = uniquify("token");
 
   @Test
@@ -43,10 +42,9 @@ public class AuthenticationServiceImplTest {
     when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(user);
     when(tokenStore.generate(username)).thenReturn(token);
 
-    UserSession session = authenticationService.authenticate(username, password);
+    String token = authenticationService.authenticate(username, password);
 
-    assertThat(session.getUser().getUsername()).isEqualTo(username);
-    verify(sessionRepository).save(session);
+    assertThat(token).isEqualTo(this.token);
   }
 
   @Test
@@ -61,15 +59,17 @@ public class AuthenticationServiceImplTest {
 
   @Test
   public void validatesUserToken() {
-    when(sessionRepository.findByToken(token)).thenReturn(new UserSession(token, user));
+    when(tokenStore.parse(token)).thenReturn(username);
 
-    User user = authenticationService.validate(token);
+    String user = authenticationService.validate(token);
 
-    assertThat(user.getUsername()).isEqualTo(username);
+    assertThat(user).isEqualTo(username);
   }
 
   @Test
   public void blowsUpWhenTokenMatchesNoUser() {
+    when(tokenStore.parse(token)).thenThrow(new MalformedJwtException(uniquify("blah")));
+
     try {
       authenticationService.validate(token);
       expectFailing(UnauthorizedAccessException.class);

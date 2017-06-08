@@ -45,12 +45,10 @@ public class AuthenticationControllerTest {
   private final String password = uniquify("password");
   private final String username = uniquify("username");
   private final String token = uniquify("token");
-  private final User user = new User(username);
-  private final UserSession session = new UserSession(token, user);
 
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
-    when(authenticationService.authenticate(username, password)).thenReturn(session);
+    when(authenticationService.authenticate(username, password)).thenReturn(token);
 
     mockMvc.perform(
         MockMvcRequestBuilders.post("/login")
@@ -63,7 +61,7 @@ public class AuthenticationControllerTest {
 
   @Test
   public void validatesTokenAgainstStoredUserSessions() throws Exception {
-    when(authenticationService.validate(token)).thenReturn(user);
+    when(authenticationService.validate(token)).thenReturn(username);
 
     mockMvc.perform(
         MockMvcRequestBuilders.post("/validate")

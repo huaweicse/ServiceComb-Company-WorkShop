@@ -15,25 +15,42 @@
  */
 package io.servicecomb.company.auth;
 
+import static com.seanyinx.github.unit.scaffolding.AssertUtils.expectFailing;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 public class JwtTokenStoreTest {
 
   private final String secretKey = uniquify("SecretKey");
   private final String someUser = uniquify("User");
-  private final TokenStore tokenStore = new JwtTokenStore(secretKey);
+  private TokenStore tokenStore;
 
   @Test
   public void generatesTokenOfSomeUser() {
-    String token = tokenStore.generate(someUser);
+    tokenStore = new JwtTokenStore(secretKey, 10);
 
+    String token = tokenStore.generate(someUser);
     assertThat(token).isNotEmpty();
 
     String user = tokenStore.parse(token);
-
     assertThat(user).isEqualTo(someUser);
+  }
+
+  @Test
+  public void blowsUpWhenTokenExpired() throws InterruptedException {
+    tokenStore = new JwtTokenStore(secretKey, 1);
+
+    String token = tokenStore.generate(someUser);
+    TimeUnit.MILLISECONDS.sleep(1002);
+
+    try {
+      tokenStore.parse(token);
+      expectFailing(ExpiredJwtException.class);
+    } catch (ExpiredJwtException ignored) {
+    }
   }
 }

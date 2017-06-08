@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
+package io.servicecomb.company.auth;
+
+import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class DoormanApplicationTests {
+public class AuthenticationServiceImplTest {
+
+  private final String username = uniquify("username");
+  private final String password = uniquify("password");
+
+  private final AuthenticationService authenticationService = new AuthenticationServiceImpl();
 
   @Test
-  public void contextLoads() {
-  }
+  public void authenticateUserWithUsernameAndPassword() {
+    UserSession session = authenticationService.authenticate(username, password);
 
+    assertThat(session.getUsername()).isEqualTo(username);
+  }
 }

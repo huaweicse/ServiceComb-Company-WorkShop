@@ -1,0 +1,3 @@
+company:
+  auth:
+    secret: "SECRET KEY"

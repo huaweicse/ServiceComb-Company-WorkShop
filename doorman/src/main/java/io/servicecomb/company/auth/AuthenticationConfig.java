@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
+package io.servicecomb.company.auth;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class DoormanApplicationTests {
+@Configuration
+class AuthenticationConfig {
 
-  @Test
-  public void contextLoads() {
+  @Bean
+  AuthenticationService authenticationService() {
+    return new AuthenticationServiceImpl();
   }
 
+  @Bean
+  TokenStore tokenStore(@Value("${company.auth.secret}") String secretKey) {
+    return new JwtTokenStore(secretKey);
+  }
 }

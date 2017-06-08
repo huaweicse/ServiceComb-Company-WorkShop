@@ -1,4 +1,4 @@
-/*
+package io.servicecomb.company.auth;/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,19 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class DoormanApplicationTests {
-
-  @Test
-  public void contextLoads() {
-  }
-
+public interface AuthenticationService {
+  UserSession authenticate(String username, String password);
 }

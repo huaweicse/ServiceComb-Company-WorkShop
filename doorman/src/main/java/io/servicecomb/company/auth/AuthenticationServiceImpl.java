@@ -13,32 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
+package io.servicecomb.company.auth;
 
-import static io.jsonwebtoken.SignatureAlgorithm.HS512;
+class AuthenticationServiceImpl implements AuthenticationService {
 
-import io.jsonwebtoken.Jwts;
-
-public class TokenStore {
-
-  private final String secretKey;
-
-  public TokenStore(String secretKey) {
-    this.secretKey = secretKey;
-  }
-
-  public String generate(String username) {
-    return Jwts.builder()
-        .setSubject(username)
-        .signWith(HS512, secretKey)
-        .compact();
-  }
-
-  public String parse(String token) {
-    return Jwts.parser()
-        .setSigningKey(secretKey)
-        .parseClaimsJws(token)
-        .getBody()
-        .getSubject();
+  @Override
+  public UserSession authenticate(String username, String password) {
+    return new UserSession(username);
   }
 }

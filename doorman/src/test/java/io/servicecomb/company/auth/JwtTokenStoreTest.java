@@ -13,42 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
+package io.servicecomb.company.auth;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
-import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.jsonwebtoken.Jwts;
 import org.junit.Test;
 
-public class TokenStoreTest {
+public class JwtTokenStoreTest {
 
-  private final String secretKey = "SecretKey";
+  private final String secretKey = uniquify("SecretKey");
   private final String someUser = uniquify("User");
-  private final TokenStore tokenStore = new TokenStore(secretKey);
+  private final TokenStore tokenStore = new JwtTokenStore(secretKey);
 
   @Test
   public void generatesTokenOfSomeUser() {
     String token = tokenStore.generate(someUser);
 
     assertThat(token).isNotEmpty();
-
-    String user = Jwts.parser()
-        .setSigningKey(secretKey)
-        .parseClaimsJws(token)
-        .getBody()
-        .getSubject();
-
-    assertThat(user).isEqualTo(someUser);
-  }
-
-  @Test
-  public void parsesTokenToGetUsername() {
-    String token = Jwts.builder()
-        .setSubject(someUser)
-        .signWith(HS512, secretKey)
-        .compact();
 
     String user = tokenStore.parse(token);
 

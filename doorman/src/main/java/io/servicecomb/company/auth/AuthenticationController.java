@@ -26,14 +26,13 @@ class AuthenticationController {
 
   static final String USERNAME = "username";
   static final String PASSWORD = "password";
+  static final String TOKEN = "token";
 
   private final AuthenticationService authenticationService;
-  private final TokenStore tokenStore;
 
   @Autowired
-  AuthenticationController(AuthenticationService authenticationService, TokenStore tokenStore) {
+  AuthenticationController(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
-    this.tokenStore = tokenStore;
   }
 
   @RequestMapping("/login")
@@ -41,8 +40,14 @@ class AuthenticationController {
   String login(
       @RequestParam(USERNAME) String username,
       @RequestParam(PASSWORD) String password) {
-    User user = authenticationService.authenticate(username, password);
 
-    return tokenStore.generate(user.getUsername());
+    return authenticationService.authenticate(username, password).getToken();
+  }
+
+  @RequestMapping("/validate")
+  @ResponseBody
+  String validate(@RequestParam(TOKEN) String token) {
+
+    return authenticationService.validate(token).getUsername();
   }
 }

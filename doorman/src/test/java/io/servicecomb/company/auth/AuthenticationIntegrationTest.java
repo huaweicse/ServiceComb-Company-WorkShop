@@ -17,6 +17,7 @@ package io.servicecomb.company.auth;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
+import static io.servicecomb.company.auth.AuthenticationController.TOKEN;
 import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,6 +73,12 @@ public class AuthenticationIntegrationTest {
     assertThat(token.getExpiration())
         .isAfterOrEqualsTo(Date.from(loginTime.plusDays(1).toInstant()))
         .isBeforeOrEqualsTo(Date.from(ZonedDateTime.now().plusDays(1).toInstant()));
+
+    mockMvc.perform(
+        MockMvcRequestBuilders.post("/validate")
+            .contentType(APPLICATION_FORM_URLENCODED)
+            .param(TOKEN, result.getResponse().getContentAsString()))
+        .andExpect(status().isOk());
   }
 
   @Test

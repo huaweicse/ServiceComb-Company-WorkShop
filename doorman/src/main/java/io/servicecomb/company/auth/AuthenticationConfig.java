@@ -23,8 +23,12 @@ import org.springframework.context.annotation.Configuration;
 class AuthenticationConfig {
 
   @Bean
-  AuthenticationService authenticationService(UserSessionRepository repository) {
-    return new AuthenticationServiceImpl(repository);
+  AuthenticationService authenticationService(
+      TokenStore tokenStore,
+      UserRepository repository,
+      UserSessionRepository sessionRepository) {
+
+    return new AuthenticationServiceImpl(tokenStore, repository, sessionRepository);
   }
 
   @Bean

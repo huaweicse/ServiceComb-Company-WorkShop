@@ -42,19 +42,15 @@ public class AuthenticationControllerTest {
   @MockBean
   private AuthenticationService authenticationService;
 
-  @MockBean
-  private TokenStore tokenStore;
-
   private final String password = uniquify("password");
   private final String username = uniquify("username");
   private final String token = uniquify("token");
+  private final User user = new User(username);
+  private final UserSession session = new UserSession(token, user);
 
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
-    when(authenticationService.authenticate(username, password))
-        .thenReturn(new User(username));
-
-    when(tokenStore.generate(username)).thenReturn(token);
+    when(authenticationService.authenticate(username, password)).thenReturn(session);
 
     mockMvc.perform(
         MockMvcRequestBuilders.post("/login")
@@ -63,5 +59,17 @@ public class AuthenticationControllerTest {
             .param(PASSWORD, password))
         .andExpect(status().isOk())
         .andExpect(content().string(token));
+  }
+
+  @Test
+  public void validatesTokenAgainstStoredUserSessions() throws Exception {
+    when(authenticationService.validate(token)).thenReturn(user);
+
+    mockMvc.perform(
+        MockMvcRequestBuilders.post("/validate")
+            .contentType(APPLICATION_FORM_URLENCODED)
+            .param("token", token))
+        .andExpect(status().isOk())
+        .andExpect(content().string(username));
   }
 }

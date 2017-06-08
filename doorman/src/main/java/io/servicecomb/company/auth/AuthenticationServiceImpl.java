@@ -17,20 +17,39 @@ package io.servicecomb.company.auth;
 
 class AuthenticationServiceImpl implements AuthenticationService {
 
-  private final UserSessionRepository repository;
+  private final TokenStore tokenStore;
+  private final UserRepository userRepository;
+  private final UserSessionRepository sessionRepository;
 
-  AuthenticationServiceImpl(UserSessionRepository repository) {
-    this.repository = repository;
+  AuthenticationServiceImpl(
+      TokenStore tokenStore,
+      UserRepository userRepository,
+      UserSessionRepository sessionRepository) {
+    this.tokenStore = tokenStore;
+    this.userRepository = userRepository;
+    this.sessionRepository = sessionRepository;
   }
 
   @Override
-  public User authenticate(String username, String password) {
-    User session = repository.findByUsernameAndPassword(username, password);
+  public UserSession authenticate(String username, String password) {
+    User user = userRepository.findByUsernameAndPassword(username, password);
 
-    if (session == null) {
+    if (user == null) {
       throw new UnauthorizedAccessException("No user matches username " + username + " and password");
     }
 
+    UserSession session = new UserSession(tokenStore.generate(username), user);
+    sessionRepository.save(session);
     return session;
+  }
+
+  @Override
+  public User validate(String token) {
+    UserSession session = sessionRepository.findByToken(token);
+    if (session == null) {
+      throw new UnauthorizedAccessException("No user matches such a token " + token);
+    }
+
+    return session.getUser();
   }
 }

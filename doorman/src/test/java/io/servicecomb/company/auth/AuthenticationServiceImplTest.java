@@ -18,27 +18,35 @@ package io.servicecomb.company.auth;
 import static com.seanyinx.github.unit.scaffolding.AssertUtils.expectFailing;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class AuthenticationServiceImplTest {
 
   private final String username = uniquify("username");
   private final String password = uniquify("password");
+  private final User user = new User(username);
 
-  private final UserSessionRepository repository = Mockito.mock(UserSessionRepository.class);
-  private final AuthenticationService authenticationService = new AuthenticationServiceImpl(repository);
+  private final TokenStore tokenStore = mock(TokenStore.class);
+  private final UserSessionRepository sessionRepository = mock(UserSessionRepository.class);
+  private final UserRepository userRepository = mock(UserRepository.class);
+
+  private final AuthenticationService authenticationService = new AuthenticationServiceImpl(
+      tokenStore, userRepository, sessionRepository);
+  private String token = uniquify("token");
 
   @Test
   public void authenticateUserWithUsernameAndPassword() {
-    when(repository.findByUsernameAndPassword(username, password))
-        .thenReturn(new User(username));
+    when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(user);
+    when(tokenStore.generate(username)).thenReturn(token);
 
-    User session = authenticationService.authenticate(username, password);
+    UserSession session = authenticationService.authenticate(username, password);
 
-    assertThat(session.getUsername()).isEqualTo(username);
+    assertThat(session.getUser().getUsername()).isEqualTo(username);
+    verify(sessionRepository).save(session);
   }
 
   @Test
@@ -48,6 +56,25 @@ public class AuthenticationServiceImplTest {
       expectFailing(UnauthorizedAccessException.class);
     } catch (UnauthorizedAccessException e) {
       assertThat(e.getMessage()).isEqualTo("No user matches username " + username + " and password");
+    }
+  }
+
+  @Test
+  public void validatesUserToken() {
+    when(sessionRepository.findByToken(token)).thenReturn(new UserSession(token, user));
+
+    User user = authenticationService.validate(token);
+
+    assertThat(user.getUsername()).isEqualTo(username);
+  }
+
+  @Test
+  public void blowsUpWhenTokenMatchesNoUser() {
+    try {
+      authenticationService.validate(token);
+      expectFailing(UnauthorizedAccessException.class);
+    } catch (UnauthorizedAccessException e) {
+      assertThat(e.getMessage()).isEqualTo("No user matches such a token " + token);
     }
   }
 }

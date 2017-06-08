@@ -15,28 +15,35 @@
  */
 package io.servicecomb.company.auth;
 
-import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Entity(name = "user_entity")
-class User {
-
+@Entity
+class UserSession {
   @Id
   private long id;
-  private String username;
-  private String password;
-  private Date lastAccessedTime;
+  private String token;
 
-  User() {
+  @ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  UserSession() {
   }
 
-  User(String username) {
-    this.username = username;
-    this.lastAccessedTime = new Date();
+  UserSession(String token, User user) {
+    this.token = token;
+    this.user = user;
   }
 
-  public String getUsername() {
-    return username;
+  User getUser() {
+    return user;
+  }
+
+  String getToken() {
+    return token;
   }
 }

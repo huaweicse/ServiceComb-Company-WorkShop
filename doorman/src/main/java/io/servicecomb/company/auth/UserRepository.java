@@ -15,28 +15,8 @@
  */
 package io.servicecomb.company.auth;
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.repository.CrudRepository;
 
-@Entity(name = "user_entity")
-class User {
-
-  @Id
-  private long id;
-  private String username;
-  private String password;
-  private Date lastAccessedTime;
-
-  User() {
-  }
-
-  User(String username) {
-    this.username = username;
-    this.lastAccessedTime = new Date();
-  }
-
-  public String getUsername() {
-    return username;
-  }
+interface UserRepository extends CrudRepository<User, Long> {
+  User findByUsernameAndPassword(String username, String password);
 }

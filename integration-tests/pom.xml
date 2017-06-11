@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>worker-tests</module>
+    <module>coverage-aggregate</module>
   </modules>
 
 

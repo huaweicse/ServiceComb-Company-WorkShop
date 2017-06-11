@@ -6,4 +6,4 @@ services:
   - docker
 
 script:
-  - mvn clean install
+  - mvn clean install -Ddocker.useColor=false -Ddocker.showLogs -Pdocker -Pjacoco coveralls:report

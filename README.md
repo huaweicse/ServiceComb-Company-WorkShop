@@ -1,4 +1,4 @@
-# ServiceComb Demo - Company [![Build Status](https://travis-ci.org/ServiceComb/company-demo.svg?branch=master)](https://travis-ci.org/ServiceComb/company-demo)[![Coverage Status](https://coveralls.io/repos/github/ServiceComb/company-demo/badge.svg)](https://coveralls.io/github/ServiceComb/company-demo)
+# ServiceComb Demo - Company [![Build Status](https://travis-ci.org/ServiceComb/LinuxCon-Beijing-WorkShop.svg?branch=master)](https://travis-ci.org/ServiceComb/LinuxCon-Beijing-WorkShop)[![Coverage Status](https://coveralls.io/repos/github/ServiceComb/LinuxCon-Beijing-WorkShop/badge.svg)](https://coveralls.io/github/ServiceComb/LinuxCon-Beijing-WorkShop)
 
 ## Purpose
 In order for users to better understand how to develop microservices using ServiceComb, an easy to

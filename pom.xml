@@ -44,6 +44,16 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>io.servicecomb.company</groupId>
+        <artifactId>worker</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>io.servicecomb.company</groupId>
+        <artifactId>doorman</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>com.github.seanyinx</groupId>
         <artifactId>unit-scaffolding</artifactId>
         <version>1.0.0</version>
@@ -87,6 +97,57 @@
             <target>1.8</target>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.eluder.coveralls</groupId>
+          <artifactId>coveralls-maven-plugin</artifactId>
+          <version>4.3.0</version>
+          <configuration>
+            <jacocoReports>
+              <jacocoReport>
+                ${project.basedir}/integration-tests/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
+              </jacocoReport>
+            </jacocoReports>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.8</version>
+          <executions>
+            <execution>
+              <id>default-prepare-agent</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+              <configuration>
+                <destFile>${project.build.directory}/jacoco.exec</destFile>
+              </configuration>
+            </execution>
+            <execution>
+              <id>default-prepare-agent-integration</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>prepare-agent-integration</goal>
+              </goals>
+              <configuration>
+                <destFile>${project.build.directory}/jacoco-it.exec</destFile>
+                <propertyName>jacoco.failsafe.argLine</propertyName>
+              </configuration>
+            </execution>
+            <execution>
+              <id>default-report</id>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>default-report-integration</id>
+              <goals>
+                <goal>report-integration</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -109,6 +170,17 @@
             </plugin>
           </plugins>
         </pluginManagement>
+      </build>
+    </profile>
+    <profile>
+      <id>jacoco</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
       </build>
     </profile>
   </profiles>

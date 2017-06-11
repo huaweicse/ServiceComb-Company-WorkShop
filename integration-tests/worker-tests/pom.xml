@@ -3,15 +3,19 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>company</artifactId>
+    <artifactId>integration-tests</artifactId>
     <groupId>io.servicecomb.company</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>worker</artifactId>
+  <artifactId>worker-tests</artifactId>
 
   <dependencies>
+    <dependency>
+      <groupId>io.servicecomb</groupId>
+      <artifactId>spring-boot-starter-provider</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
@@ -19,10 +23,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.servicecomb</groupId>
-      <artifactId>spring-boot-starter-provider</artifactId>
     </dependency>
 
     <dependency>
@@ -46,15 +46,11 @@
           <mixins>
             <mixin>
               <groupId>io.servicecomb.company</groupId>
-              <artifactId>docker-build-config</artifactId>
+              <artifactId>docker-run-config</artifactId>
               <version>0.0.1-SNAPSHOT</version>
             </mixin>
           </mixins>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -62,15 +58,14 @@
   <profiles>
     <profile>
       <id>docker</id>
+      <properties>
+        <demo.service.name>worker</demo.service.name>
+      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.commonjava.maven.plugins</groupId>
-            <artifactId>directory-maven-plugin</artifactId>
           </plugin>
         </plugins>
       </build>

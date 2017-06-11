@@ -15,8 +15,13 @@
  */
 package io.servicecomb.company.worker;
 
-public class FibonacciCalculator {
+import io.servicecomb.provider.pojo.RpcSchema;
 
+@RpcSchema(schemaId = "fibonacciService")
+// class modifier has to be public, or producer invoker will fail to access it
+public class FibonacciServiceImpl implements FibonacciService {
+
+  @Override
   public long term(int n) {
     if (n < 0) {
       throw new IllegalArgumentException("Fibonacci term must not be negative: " + n);

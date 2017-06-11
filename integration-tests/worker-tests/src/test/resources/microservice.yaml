@@ -1,0 +1,15 @@
+APPLICATION_ID: worker
+service_description:
+  name: fibonacciClient
+  version: 0.0.1
+cse:
+  service:
+    registry:
+      address: http://192.168.99.100:32771
+  handler:
+    chain:
+      Consumer:
+        default: bizkeeper-consumer,loadbalance
+  references:
+    fibonacci:
+      version-rule: 0.0.1

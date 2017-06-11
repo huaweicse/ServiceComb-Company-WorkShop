@@ -123,7 +123,8 @@
             <version>2.19.1</version>
             <configuration>
               <systemPropertyVariables>
-                <cse.service.registry.address>http://${docker.hostname}:${service.center.port}
+                <cse.service.registry.address>
+                  http://${docker.hostname}:${service.center.port}
                 </cse.service.registry.address>
               </systemPropertyVariables>
               <argLine>${jacoco.failsafe.argLine}</argLine>

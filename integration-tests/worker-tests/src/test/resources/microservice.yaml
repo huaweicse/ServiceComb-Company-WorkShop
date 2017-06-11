@@ -5,7 +5,7 @@ service_description:
 cse:
   service:
     registry:
-      address: http://192.168.99.100:32771
+      address: http://sc.servicecomb.io:9980
   handler:
     chain:
       Consumer:

@@ -15,11 +15,10 @@
  */
 package io.servicecomb.company.worker;
 
-import io.servicecomb.provider.pojo.RpcSchema;
+import org.springframework.stereotype.Service;
 
-@RpcSchema(schemaId = "fibonacciService")
-// class modifier has to be public, or producer invoker will fail to access it
-public class FibonacciServiceImpl implements FibonacciService {
+@Service
+class FibonacciServiceImpl implements FibonacciService {
 
   @Override
   public long term(int n) {

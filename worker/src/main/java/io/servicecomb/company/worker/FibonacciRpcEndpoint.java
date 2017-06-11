@@ -1,4 +1,4 @@
-package io.servicecomb.company.worker;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,26 @@ package io.servicecomb.company.worker;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.worker;
 
-interface FibonacciService {
 
-  long term(int n);
+import io.servicecomb.provider.pojo.RpcSchema;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+@RpcSchema(schemaId = "fibonacciRpcEndpoint")
+// class modifier has to be public, or producer invoker will fail to access it
+public class FibonacciRpcEndpoint implements FibonacciEndpoint {
+
+  private final FibonacciService fibonacciService;
+
+  @Autowired
+  public FibonacciRpcEndpoint(FibonacciService fibonacciService) {
+    this.fibonacciService = fibonacciService;
+  }
+
+  @Override
+  public long term(int n) {
+    return fibonacciService.term(n);
+  }
 }

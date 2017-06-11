@@ -1,4 +1,4 @@
-package io.servicecomb.company.worker;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,9 @@ package io.servicecomb.company.worker;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.worker;
 
-interface FibonacciService {
+public interface FibonacciEndpoint {
 
   long term(int n);
 }

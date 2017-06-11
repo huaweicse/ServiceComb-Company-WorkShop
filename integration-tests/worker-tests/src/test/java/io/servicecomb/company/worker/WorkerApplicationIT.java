@@ -22,11 +22,15 @@ import io.servicecomb.springboot.starter.provider.EnableServiceComb;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,18 +39,34 @@ public class WorkerApplicationIT {
   @Autowired
   private FibonacciProvider fibonacciProvider;
 
+  @Value("${service.address}")
+  private String serviceAddress;
+
+  private final long fibonacciValue = 12586269025L;
+  private final RestTemplate restTemplate = new RestTemplate();
+
   @Test
   public void getsNthTermOfFibonacci() {
     long fibo = fibonacciProvider.term(50);
 
-    assertThat(fibo).isEqualTo(12586269025L);
+    assertThat(fibo).isEqualTo(fibonacciValue);
+  }
+
+  @Test
+  public void getsNthTermOfFibonacciByRest() {
+    ResponseEntity<Long> responseEntity = restTemplate.getForEntity(
+        serviceAddress + "/fibonacci/term?n=50",
+        long.class);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(responseEntity.getBody()).isEqualTo(fibonacciValue);
   }
 
   @SpringBootApplication
   @EnableServiceComb
   static class WorkerTestApplication {
     // this annotation does not take effect in spring test
-    @RpcReference(microserviceName = "fibonacci", schemaId = "fibonacciService")
+    @RpcReference(microserviceName = "fibonacci", schemaId = "fibonacciRpcEndpoint")
     private FibonacciProvider fibonacciProvider;
 
     public static void main(String[] args) {

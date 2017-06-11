@@ -126,6 +126,9 @@
                 <cse.service.registry.address>
                   http://${docker.hostname}:${service.center.port}
                 </cse.service.registry.address>
+                <service.address>
+                  http://${docker.hostname}:8080
+                </service.address>
               </systemPropertyVariables>
               <argLine>${jacoco.failsafe.argLine}</argLine>
             </configuration>

@@ -14,6 +14,7 @@
     <module>docker-build-config</module>
     <module>docker-run-config</module>
     <module>integration-tests</module>
+    <module>manager</module>
   </modules>
 
   <packaging>pom</packaging>
@@ -36,6 +37,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>Camden.SR6</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>io.servicecomb</groupId>
         <artifactId>java-chassis-dependencies</artifactId>

@@ -70,10 +70,12 @@ public class AuthenticationService {
       logger.warn("No such user found with token {}", token);
       return new ResponseEntity<>(FORBIDDEN);
     }
+    logger.info("Validated request of token {} to be user {}", token, responseEntity.getBody());
     return responseEntity;
   }
 
   private ResponseEntity<String> timeout(String token) {
+    logger.warn("Request to validate token {} timed out", token);
     return new ResponseEntity<>(REQUEST_TIMEOUT);
   }
 

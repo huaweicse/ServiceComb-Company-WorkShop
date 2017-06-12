@@ -1,0 +1,9 @@
+zuul:
+  routes:
+    doorman:
+      url: http://localhost:8082
+      sensitiveHeaders:
+
+ribbon:
+  eureka:
+    enabled: false

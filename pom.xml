@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.servicecomb.company</groupId>
+  <groupId>io.servicecomb.workshop.demo</groupId>
   <artifactId>company</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
@@ -44,12 +44,12 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.company</groupId>
+        <groupId>io.servicecomb.workshop.demo</groupId>
         <artifactId>worker</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.company</groupId>
+        <groupId>io.servicecomb.workshop.demo</groupId>
         <artifactId>doorman</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>

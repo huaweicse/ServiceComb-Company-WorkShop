@@ -15,6 +15,8 @@
  */
 package io.servicecomb.company.auth;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +37,7 @@ class AuthenticationController {
     this.authenticationService = authenticationService;
   }
 
-  @RequestMapping("/login")
+  @RequestMapping(value = "/login", method = POST)
   @ResponseBody
   String login(
       @RequestParam(USERNAME) String username,
@@ -44,7 +46,7 @@ class AuthenticationController {
     return authenticationService.authenticate(username, password);
   }
 
-  @RequestMapping("/validate")
+  @RequestMapping(value = "/validate", method = POST)
   @ResponseBody
   String validate(@RequestParam(TOKEN) String token) {
 

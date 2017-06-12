@@ -1,4 +1,4 @@
-package io.servicecomb.company.worker;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,17 @@ package io.servicecomb.company.worker;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.worker;
 
+/**
+ * {@link FibonacciService} provides the interface of actual fibonacci sequence calculation.
+ */
 interface FibonacciService {
 
+  /**
+   * @see FibonacciEndpoint#term(int)
+   * @param n the index of fibonacci sequence
+   * @return the nth term of fibonacci sequence
+   */
   long term(int n);
 }

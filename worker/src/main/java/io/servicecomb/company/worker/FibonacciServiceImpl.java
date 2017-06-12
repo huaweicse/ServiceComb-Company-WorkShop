@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 class FibonacciServiceImpl implements FibonacciService {
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public long term(int n) {
     if (n < 0) {

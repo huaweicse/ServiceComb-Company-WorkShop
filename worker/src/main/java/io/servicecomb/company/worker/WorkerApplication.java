@@ -27,6 +27,8 @@ public class WorkerApplication {
     SpringApplication.run(WorkerApplication.class, args);
   }
 
+  // do not enable service registration/discovery and schema generation/registration
+  // unless the active profile is not dev
   @EnableServiceComb
   @Profile("!dev")
   class ServiceCombConfig {

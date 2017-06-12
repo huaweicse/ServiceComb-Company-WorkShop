@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * {@link FibonacciRestEndpoint} provides the rest implementation of {@link FibonacciEndpoint}.
+ * The rest endpoint is accessed by /fibonacci/term?n={value} with HTTP GET.
+ */
 @RestSchema(schemaId = "fibonacciRestEndpoint")
 @RequestMapping("/fibonacci")
 @Controller

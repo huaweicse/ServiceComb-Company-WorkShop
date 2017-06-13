@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.manager;
 
-import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,8 +40,8 @@ public class AuthenticationServiceHappyTest {
   @Rule
   public final PactProviderRule providerRule = new PactProviderRule("Doorman", this);
 
-  private final String token = uniquify("token");
-  private final String username = uniquify("username");
+  private final String token = "sean-token";
+  private final String username = "Sean";
 
   private final ServiceInstance serviceInstance = mock(ServiceInstance.class);
   private final LoadBalancerClient loadBalancer = mock(LoadBalancerClient.class);
@@ -52,7 +51,7 @@ public class AuthenticationServiceHappyTest {
   @Pact(consumer = "Manager")
   public PactFragment createFragment(PactDslWithProvider pactDslWithProvider) throws JsonProcessingException {
     Map<String, String> headers = new HashMap<>();
-    headers.put("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    headers.put("Content-Type", MediaType.TEXT_PLAIN_VALUE);
 
     return pactDslWithProvider
         .given("User Sean is authorized")

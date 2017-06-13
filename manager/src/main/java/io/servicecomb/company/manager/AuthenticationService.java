@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.manager;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.REQUEST_TIMEOUT;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -35,6 +34,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * {@link AuthenticationService} validates user requests by sending the token in request header to
+ * remote doorman for authentication.
+ */
 @Service
 public class AuthenticationService {
 
@@ -70,7 +73,6 @@ public class AuthenticationService {
 
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       logger.warn("No such user found with token {}", token);
-      return new ResponseEntity<>(FORBIDDEN);
     }
     logger.info("Validated request of token {} to be user {}", token, responseEntity.getBody());
     return responseEntity;

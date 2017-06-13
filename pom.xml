@@ -9,12 +9,12 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <modules>
+    <module>manager</module>
     <module>doorman</module>
     <module>worker</module>
     <module>docker-build-config</module>
     <module>docker-run-config</module>
     <module>integration-tests</module>
-    <module>manager</module>
   </modules>
 
   <packaging>pom</packaging>
@@ -75,16 +75,34 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>2.4.9</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>au.com.dius</groupId>
         <artifactId>pact-jvm-consumer_2.11</artifactId>
         <version>${pact.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>au.com.dius</groupId>
         <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
         <version>${pact.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>au.com.dius</groupId>
@@ -107,6 +125,10 @@
           <exclusion>
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>*</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -136,6 +158,15 @@
           <artifactId>mixin-maven-plugin</artifactId>
           <version>0.1-alpha-39</version>
           <extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.19.1</version>
+          <configuration>
+            <systemPropertyVariables>
+              <pact.rootDir>../target/pacts</pact.rootDir>
+            </systemPropertyVariables>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

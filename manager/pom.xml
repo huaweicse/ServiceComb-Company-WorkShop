@@ -49,6 +49,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+    </dependency>
+    <dependency>
       <groupId>au.com.dius</groupId>
       <artifactId>pact-jvm-consumer_2.11</artifactId>
       <scope>test</scope>

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
+package io.servicecomb.company.auth.endpoint.rest;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
-import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
-import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
-import static io.servicecomb.company.auth.AuthenticationController.TOKEN_PREFIX;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.PASSWORD;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN_PREFIX;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.servicecomb.company.auth.AuthenticationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

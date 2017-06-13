@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
+package io.servicecomb.company.auth.endpoint.rest;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
-import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
-import static io.servicecomb.company.auth.AuthenticationController.TOKEN;
-import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
-import static io.servicecomb.company.auth.AuthenticationController.TOKEN_PREFIX;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.PASSWORD;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN_PREFIX;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.servicecomb.company.DoormanApplication;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import org.junit.Test;
@@ -42,7 +43,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = {"company.auth.secret=someSecretKey"})
+@SpringBootTest(properties = {"company.auth.secret=someSecretKey"}, classes = DoormanApplication.class)
 @AutoConfigureMockMvc
 public class AuthenticationIntegrationTest {
 

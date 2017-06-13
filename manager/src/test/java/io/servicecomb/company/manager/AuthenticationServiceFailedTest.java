@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.manager;
 
-import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -41,7 +40,7 @@ public class AuthenticationServiceFailedTest {
   @Rule
   public final PactProviderRule providerRule = new PactProviderRule("Doorman", this);
 
-  private final String token = uniquify("token");
+  private final String token = "unknown-token";
 
   private final ServiceInstance serviceInstance = mock(ServiceInstance.class);
   private final LoadBalancerClient loadBalancer = mock(LoadBalancerClient.class);
@@ -51,7 +50,7 @@ public class AuthenticationServiceFailedTest {
   @Pact(consumer = "Manager")
   public PactFragment createFragment(PactDslWithProvider pactDslWithProvider) throws JsonProcessingException {
     Map<String, String> headers = new HashMap<>();
-    headers.put("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    headers.put("Content-Type", MediaType.TEXT_PLAIN_VALUE);
 
     return pactDslWithProvider
         .given("User Jack is unauthorized")
@@ -61,7 +60,7 @@ public class AuthenticationServiceFailedTest {
         .method("POST")
         .willRespondWith()
         .headers(headers)
-        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .status(HttpStatus.FORBIDDEN.value())
         .toFragment();
   }
 

@@ -71,6 +71,7 @@ public class ManagerApplicationTest {
 
   private static final String password = uniquify("password");
   private static final String token = uniquify("token");
+  private static final String unknownToken = uniquify("unknownToken");
   private static final String authorization = TOKEN_PREFIX + token;
   private static final String doormanAddress = "http://localhost:8082";
 
@@ -99,6 +100,12 @@ public class ManagerApplicationTest {
                 .withStatus(SC_OK)
                 .withBody(validUsername)));
 
+    stubFor(post(urlEqualTo("/validate"))
+        .withRequestBody(containing("token=" + unknownToken))
+        .willReturn(
+            aResponse()
+                .withStatus(SC_FORBIDDEN)));
+
     stubFor(get(urlEqualTo("/fibonacci/term?n=1"))
         .willReturn(
             aResponse()
@@ -126,7 +133,7 @@ public class ManagerApplicationTest {
     ResponseEntity<String> responseEntity = restTemplate.exchange(
         "/worker/fibonacci/term?n=1",
         GET,
-        validationRequest(),
+        validationRequest(token),
         String.class);
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
@@ -145,6 +152,20 @@ public class ManagerApplicationTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(FORBIDDEN);
   }
 
+  @Test
+  public void forbidsRequestsWithUnknownToken() {
+    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
+    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
+
+    ResponseEntity<String> responseEntity = restTemplate.exchange(
+        "/worker/fibonacci/term?n=1",
+        GET,
+        validationRequest(unknownToken),
+        String.class);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(FORBIDDEN);
+  }
+
   private HttpEntity<MultiValueMap<String, String>> loginRequest(String username) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -156,10 +177,10 @@ public class ManagerApplicationTest {
     return new HttpEntity<>(map, headers);
   }
 
-  private HttpEntity<Object> validationRequest() {
+  private HttpEntity<Object> validationRequest(String token) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-    headers.add(AUTHORIZATION, authorization);
+    headers.add(AUTHORIZATION, TOKEN_PREFIX + token);
 
     return new HttpEntity<>(headers);
   }

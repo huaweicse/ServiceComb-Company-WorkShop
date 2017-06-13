@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,7 @@ class AuthenticationAwareFilter extends ZuulFilter {
 
   private final AuthenticationService authenticationService;
 
+  @Autowired
   AuthenticationAwareFilter(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
@@ -73,7 +75,7 @@ class AuthenticationAwareFilter extends ZuulFilter {
     RequestContext context = RequestContext.getCurrentContext();
     HttpServletResponse response = context.getResponse();
 
-    if (doesContainToken(context)) {
+    if (doesNotContainToken(context)) {
       logger.warn("No token found in request header");
       response.sendError(SC_FORBIDDEN);
     } else {
@@ -84,13 +86,17 @@ class AuthenticationAwareFilter extends ZuulFilter {
     }
   }
 
-  private boolean doesContainToken(RequestContext context) {
-    return context.getRequest().getHeader(AUTHORIZATION) == null
-        || !context.getRequest().getHeader(AUTHORIZATION).startsWith(TOKEN_PREFIX);
+  private boolean doesNotContainToken(RequestContext context) {
+    return authorizationHeader(context) == null
+        || !authorizationHeader(context).startsWith(TOKEN_PREFIX);
   }
 
   private String token(RequestContext context) {
-    return context.getRequest().getHeader(AUTHORIZATION).replace(TOKEN_PREFIX, "");
+    return authorizationHeader(context).replace(TOKEN_PREFIX, "");
+  }
+
+  private String authorizationHeader(RequestContext context) {
+    return context.getRequest().getHeader(AUTHORIZATION);
   }
 
   private String path() {

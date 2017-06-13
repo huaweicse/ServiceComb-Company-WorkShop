@@ -15,9 +15,13 @@
  */
 package io.servicecomb.company.auth;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 class AuthenticationController {
 
+  static final String TOKEN_PREFIX = "Bearer ";
   static final String USERNAME = "username";
   static final String PASSWORD = "password";
   static final String TOKEN = "token";
@@ -38,12 +43,15 @@ class AuthenticationController {
   }
 
   @RequestMapping(value = "/login", method = POST)
-  @ResponseBody
-  String login(
+  ResponseEntity<String> login(
       @RequestParam(USERNAME) String username,
       @RequestParam(PASSWORD) String password) {
 
-    return authenticationService.authenticate(username, password);
+    String token = authenticationService.authenticate(username, password);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(AUTHORIZATION, TOKEN_PREFIX + token);
+
+    return new ResponseEntity<>("Welcome, " + username, headers, OK);
   }
 
   @RequestMapping(value = "/validate", method = POST)

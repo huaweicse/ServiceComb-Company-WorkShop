@@ -68,7 +68,6 @@ public class ManagerApplicationTest {
   public static final WireMockRule wireMockRule = new WireMockRule(8082);
 
   private static final String validUsername = uniquify("validUsername");
-  private static final String unknownUsername = uniquify("unknownUsername");
 
   private static final String password = uniquify("password");
   private static final String token = uniquify("token");
@@ -89,14 +88,9 @@ public class ManagerApplicationTest {
         .withRequestBody(containing("username=" + validUsername))
         .willReturn(
             aResponse()
+                .withHeader(AUTHORIZATION, authorization)
                 .withStatus(SC_OK)
                 .withBody(token)));
-
-    stubFor(post(urlEqualTo("/login"))
-        .withRequestBody(containing("username=" + unknownUsername))
-        .willReturn(
-            aResponse()
-                .withStatus(SC_FORBIDDEN)));
 
     stubFor(post(urlEqualTo("/validate"))
         .withRequestBody(containing("token=" + token))
@@ -122,17 +116,6 @@ public class ManagerApplicationTest {
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     assertThat(responseEntity.getHeaders())
         .containsEntry(AUTHORIZATION, singletonList(authorization));
-  }
-
-  @Test
-  public void forbidsUnauthenticatedUser() throws Exception {
-    ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-        "/doorman/login",
-        loginRequest(unknownUsername),
-        String.class);
-
-    assertThat(responseEntity.getStatusCode()).isEqualTo(FORBIDDEN);
-    assertThat(responseEntity.getHeaders()).doesNotContainKey(AUTHORIZATION);
   }
 
   @Test

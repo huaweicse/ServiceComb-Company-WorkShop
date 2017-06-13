@@ -19,8 +19,10 @@ import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
 import static io.servicecomb.company.auth.AuthenticationController.TOKEN;
 import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
+import static io.servicecomb.company.auth.AuthenticationController.TOKEN_PREFIX;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,9 +66,10 @@ public class AuthenticationIntegrationTest {
             .param(PASSWORD, password))
         .andExpect(status().isOk()).andReturn();
 
+    String tokenInHeader = result.getResponse().getHeader(AUTHORIZATION).replace(TOKEN_PREFIX, "");
     Claims token = Jwts.parser()
         .setSigningKey(secretKey)
-        .parseClaimsJws(result.getResponse().getContentAsString())
+        .parseClaimsJws(tokenInHeader)
         .getBody();
 
     assertThat(token.getSubject()).isEqualTo(username);
@@ -77,7 +80,7 @@ public class AuthenticationIntegrationTest {
     mockMvc.perform(
         MockMvcRequestBuilders.post("/validate")
             .contentType(APPLICATION_FORM_URLENCODED)
-            .param(TOKEN, result.getResponse().getContentAsString()))
+            .param(TOKEN, tokenInHeader))
         .andExpect(status().isOk());
   }
 

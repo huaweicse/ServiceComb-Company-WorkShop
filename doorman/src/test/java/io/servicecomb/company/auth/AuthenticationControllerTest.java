@@ -18,9 +18,12 @@ package io.servicecomb.company.auth;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
 import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
+import static io.servicecomb.company.auth.AuthenticationController.TOKEN_PREFIX;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
@@ -56,7 +59,8 @@ public class AuthenticationControllerTest {
             .param(USERNAME, username)
             .param(PASSWORD, password))
         .andExpect(status().isOk())
-        .andExpect(content().string(token));
+        .andExpect(header().string(AUTHORIZATION, TOKEN_PREFIX + token))
+        .andExpect(content().string("Welcome, " + username));
   }
 
   @Test

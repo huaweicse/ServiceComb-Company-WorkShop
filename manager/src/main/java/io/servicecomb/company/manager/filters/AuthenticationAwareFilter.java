@@ -22,9 +22,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import io.servicecomb.company.manager.AuthenticationService;
-import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,28 +65,27 @@ class AuthenticationAwareFilter extends ZuulFilter {
 
   @Override
   public Object run() {
-    try {
-      filter();
-    } catch (IOException e) {
-      logger.error("Failed to filter user request", e);
-      throw new IllegalStateException(e);
-    }
+    filter();
     return null;
   }
 
-  private void filter() throws IOException {
+  private void filter() {
     RequestContext context = RequestContext.getCurrentContext();
-    HttpServletResponse response = context.getResponse();
 
     if (doesNotContainToken(context)) {
       logger.warn("No token found in request header");
-      response.sendError(SC_FORBIDDEN);
+      rejectRequest(context);
     } else {
       ResponseEntity<String> responseEntity = authenticationService.validate(token(context));
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        response.sendError(SC_FORBIDDEN);
+        rejectRequest(context);
       }
     }
+  }
+
+  private void rejectRequest(RequestContext context) {
+    context.setResponseStatusCode(SC_FORBIDDEN);
+    context.setSendZuulResponse(false);
   }
 
   private boolean doesNotContainToken(RequestContext context) {

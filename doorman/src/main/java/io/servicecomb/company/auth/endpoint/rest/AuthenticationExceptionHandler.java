@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * {@link AuthenticationExceptionHandler} intercepts response with {@link
+ * UnauthorizedAccessException} and wraps the exception message in a forbidden response.
+ */
 @ControllerAdvice
 class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
 

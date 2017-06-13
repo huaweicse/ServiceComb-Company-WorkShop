@@ -31,6 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+/**
+ * {@link AuthenticationAwareFilter} is a pre-filter for netflix Zuul. It validates all user
+ * requests except those ending with /login to doorman to verify if the JWT token provided is
+ * genuine.
+ */
 @Component
 class AuthenticationAwareFilter extends ZuulFilter {
 

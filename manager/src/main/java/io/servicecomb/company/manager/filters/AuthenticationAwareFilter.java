@@ -15,12 +15,19 @@
  */
 package io.servicecomb.company.manager.filters;
 
+import static io.servicecomb.company.manager.filters.FilterConstants.TOKEN_PREFIX;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import io.servicecomb.company.manager.AuthenticationService;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +36,12 @@ class AuthenticationAwareFilter extends ZuulFilter {
   private static final Logger logger = LoggerFactory.getLogger(AuthenticationAwareFilter.class);
 
   private static final String LOGIN_PATH = "/login";
+
+  private final AuthenticationService authenticationService;
+
+  AuthenticationAwareFilter(AuthenticationService authenticationService) {
+    this.authenticationService = authenticationService;
+  }
 
   @Override
   public String filterType() {
@@ -42,29 +55,54 @@ class AuthenticationAwareFilter extends ZuulFilter {
 
   @Override
   public boolean shouldFilter() {
-    return true;
+    return !path().endsWith(LOGIN_PATH);
   }
 
   @Override
   public Object run() {
-    RequestContext context = RequestContext.getCurrentContext();
-    filter(context);
+    try {
+      filter();
+    } catch (IOException e) {
+      logger.error("Failed to filter user request", e);
+      throw new IllegalStateException(e);
+    }
     return null;
   }
 
-  private void filter(RequestContext context) {
-    HttpServletRequest request = context.getRequest();
+  private void filter() throws IOException {
+    RequestContext context = RequestContext.getCurrentContext();
     HttpServletResponse response = context.getResponse();
+
+    if (doesContainToken(context)) {
+      logger.warn("No token found in request header");
+      response.sendError(SC_FORBIDDEN);
+    } else {
+      ResponseEntity<String> responseEntity = authenticationService.validate(token(context));
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        response.sendError(SC_FORBIDDEN);
+      }
+    }
+  }
+
+  private boolean doesContainToken(RequestContext context) {
+    return context.getRequest().getHeader(AUTHORIZATION) == null
+        || !context.getRequest().getHeader(AUTHORIZATION).startsWith(TOKEN_PREFIX);
+  }
+
+  private String token(RequestContext context) {
+    return context.getRequest().getHeader(AUTHORIZATION).replace(TOKEN_PREFIX, "");
+  }
+
+  private String path() {
+    RequestContext context = RequestContext.getCurrentContext();
+    HttpServletRequest request = context.getRequest();
 
     String path = request.getContextPath() + request.getServletPath();
     if (request.getPathInfo() != null) {
       path = path + request.getPathInfo();
     }
-    logger.info("Get the request path {}", path);
 
-    if (path.endsWith(LOGIN_PATH)) {
-      // if logging in, let the request flow
-      return;
-    }
+    logger.debug("Get the request path {}", path);
+    return path;
   }
 }

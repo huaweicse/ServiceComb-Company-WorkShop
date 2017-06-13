@@ -22,6 +22,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +43,8 @@ public class AuthenticationService {
   private final RestTemplate restTemplate;
   private final LoadBalancerClient loadBalancer;
 
-  public AuthenticationService(LoadBalancerClient loadBalancer) {
+  @Autowired
+  AuthenticationService(LoadBalancerClient loadBalancer) {
     this.loadBalancer = loadBalancer;
     restTemplate = new RestTemplate();
 

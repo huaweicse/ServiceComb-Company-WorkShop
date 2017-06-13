@@ -15,6 +15,7 @@
  */
 package io.servicecomb.company.manager.filters;
 
+import static io.servicecomb.company.manager.filters.FilterConstants.TOKEN_PREFIX;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -69,12 +70,12 @@ class TokenWrappingFilter extends ZuulFilter {
     HttpServletResponse response = context.getResponse();
 
     if (context.getResponseBody() != null) {
-      response.addHeader(AUTHORIZATION, "Bearer " + context.getResponseBody());
+      response.addHeader(AUTHORIZATION, TOKEN_PREFIX + context.getResponseBody());
     } else {
       try {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(8192);
         writeResponse(context.getResponseDataStream(), outputStream);
-        response.addHeader(AUTHORIZATION, "Bearer " + outputStream.toString());
+        response.addHeader(AUTHORIZATION, TOKEN_PREFIX + outputStream.toString());
       } catch (IOException e) {
         logger.error("Failed to read response body", e);
         response.sendError(SC_INTERNAL_SERVER_ERROR);

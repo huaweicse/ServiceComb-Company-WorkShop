@@ -2,7 +2,8 @@ zuul:
   routes:
     doorman:
       url: http://localhost:8082
-      sensitiveHeaders:
+    worker:
+      url: http://localhost:8082
 
 ribbon:
   eureka:

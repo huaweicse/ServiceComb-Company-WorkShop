@@ -15,7 +15,21 @@
  */
 package io.servicecomb.company.manager.filters;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
+import com.netflix.zuul.context.RequestContext;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
+
+@Component
+class PathExtractor {
+
+  String path(RequestContext context) {
+    HttpServletRequest request = context.getRequest();
+
+    String path = request.getContextPath() + request.getServletPath();
+    if (request.getPathInfo() != null) {
+      path = path + request.getPathInfo();
+    }
+
+    return path;
+  }
 }

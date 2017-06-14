@@ -13,9 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager.filters;
+package io.servicecomb.company.manager.archive;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.seanyinx.github.unit.scaffolding.Randomness;
+import org.junit.Test;
+
+public class HitArchiveTest {
+  private final String value = Randomness.uniquify("value");
+  private final HitArchive<String> archive = new HitArchive<>(value);
+
+  @Test
+  public void getsProvidedValue() {
+    assertThat(archive.exists()).isTrue();
+    assertThat(archive.get()).isEqualTo(value);
+  }
 }

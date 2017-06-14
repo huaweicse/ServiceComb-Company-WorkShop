@@ -17,10 +17,13 @@ package io.servicecomb.company.manager;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.manager.filters.FilterConstants.TOKEN_PREFIX;
 import static java.util.Collections.singletonList;
@@ -35,6 +38,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import io.servicecomb.company.manager.archive.Archive;
+import io.servicecomb.company.manager.archive.ProjectArchive;
 import java.net.URI;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -83,6 +88,9 @@ public class ManagerApplicationTest {
   @MockBean
   private LoadBalancerClient loadBalancer;
 
+  @Autowired
+  private ProjectArchive<Integer, Long> archive;
+
   @BeforeClass
   public static void setUp() throws Exception {
     stubFor(post(urlEqualTo("/login"))
@@ -126,7 +134,7 @@ public class ManagerApplicationTest {
   }
 
   @Test
-  public void validatesToken() {
+  public void validatesTokenAndCachesResult() {
     when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
     when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
 
@@ -138,6 +146,22 @@ public class ManagerApplicationTest {
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     assertThat(responseEntity.getBody()).isEqualTo("1");
+
+    responseEntity = restTemplate.exchange(
+        "/worker/fibonacci/term?n=1",
+        GET,
+        validationRequest(token),
+        String.class);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    assertThat(responseEntity.getBody()).isEqualTo("1");
+
+    verify(exactly(1), getRequestedFor(urlEqualTo("/fibonacci/term?n=1")));
+
+    Archive<Long> result = archive.search(1);
+
+    assertThat(result.exists()).isTrue();
+    assertThat(result.get()).isEqualTo(1L);
   }
 
   @Test

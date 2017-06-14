@@ -13,9 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager.filters;
+package io.servicecomb.company.manager.archive;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
+/**
+ * Represents cache hit of a cache entry.
+ *
+ * @param <V> the value of the cache entry
+ */
+class HitArchive<V> implements Archive<V> {
+
+  private final V value;
+
+  HitArchive(V value) {
+    this.value = value;
+  }
+
+  @Override
+  public V get() {
+    return value;
+  }
+
+  @Override
+  public boolean exists() {
+    return true;
+  }
 }

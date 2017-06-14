@@ -22,7 +22,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import io.servicecomb.company.manager.AuthenticationService;
-import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +41,15 @@ class AuthenticationAwareFilter extends ZuulFilter {
   private static final String LOGIN_PATH = "/login";
 
   private final AuthenticationService authenticationService;
+  private final PathExtractor pathExtractor;
 
   @Autowired
-  AuthenticationAwareFilter(AuthenticationService authenticationService) {
+  AuthenticationAwareFilter(
+      AuthenticationService authenticationService,
+      PathExtractor pathExtractor) {
+
     this.authenticationService = authenticationService;
+    this.pathExtractor = pathExtractor;
   }
 
   @Override
@@ -60,7 +64,9 @@ class AuthenticationAwareFilter extends ZuulFilter {
 
   @Override
   public boolean shouldFilter() {
-    return !path().endsWith(LOGIN_PATH);
+    String path = pathExtractor.path(RequestContext.getCurrentContext());
+    logger.info("Received request with query path: {}", path);
+    return !path.endsWith(LOGIN_PATH);
   }
 
   @Override
@@ -76,9 +82,13 @@ class AuthenticationAwareFilter extends ZuulFilter {
       logger.warn("No token found in request header");
       rejectRequest(context);
     } else {
-      ResponseEntity<String> responseEntity = authenticationService.validate(token(context));
+      String token = token(context);
+      ResponseEntity<String> responseEntity = authenticationService.validate(token);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        logger.warn("Unauthorized token {} and request rejected", token);
         rejectRequest(context);
+      } else {
+        logger.info("Token {} validated", token);
       }
     }
   }
@@ -101,16 +111,4 @@ class AuthenticationAwareFilter extends ZuulFilter {
     return context.getRequest().getHeader(AUTHORIZATION);
   }
 
-  private String path() {
-    RequestContext context = RequestContext.getCurrentContext();
-    HttpServletRequest request = context.getRequest();
-
-    String path = request.getContextPath() + request.getServletPath();
-    if (request.getPathInfo() != null) {
-      path = path + request.getPathInfo();
-    }
-
-    logger.debug("Get the request path {}", path);
-    return path;
-  }
 }

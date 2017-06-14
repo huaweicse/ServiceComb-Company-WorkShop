@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager.filters;
+package io.servicecomb.company.manager.archive;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableCaching
+class ProjectArchiveConfig {
+  @Bean
+  ProjectArchive<Integer, Long> projectArchive() {
+    return new ProjectArchive<>();
+  }
 }

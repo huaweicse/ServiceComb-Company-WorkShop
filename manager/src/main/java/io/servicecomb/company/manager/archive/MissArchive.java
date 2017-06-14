@@ -13,9 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager.filters;
+package io.servicecomb.company.manager.archive;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
+import java.util.NoSuchElementException;
+
+/**
+ * Represents cache miss of a cache entry.
+ *
+ * @param <V> value of the cache entry
+ */
+class MissArchive<V> implements Archive<V> {
+
+  private final String term;
+
+  MissArchive(String term) {
+    this.term = term;
+  }
+
+  @Override
+  public V get() {
+    throw new NoSuchElementException("No result found for search term " + term);
+  }
+
+  @Override
+  public boolean exists() {
+    return false;
+  }
 }

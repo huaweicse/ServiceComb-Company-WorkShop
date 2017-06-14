@@ -1,6 +1,6 @@
-﻿APPLICATION_ID: worker
+﻿APPLICATION_ID: company
 service_description:
-  name: fibonacci
+  name: worker
   version: 0.0.1
 cse:
   service:

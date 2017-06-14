@@ -19,6 +19,7 @@ package io.servicecomb.company.beekeeper;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import io.servicecomb.provider.rest.common.RestSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * Rest endpoint of bee ancestor counting service. Endpoints annotated with {@link RestSchema} and
+ * their rest resources must be public or schema generation will fail.
+ */
+@RestSchema(schemaId = "beekeeperRestEndpoint")
+@RequestMapping("/")
 @Controller
-class BeekeeperController {
+public class BeekeeperController {
 
   private static final Logger logger = LoggerFactory.getLogger(BeekeeperController.class);
 
@@ -41,7 +48,7 @@ class BeekeeperController {
 
   @RequestMapping(value = "/drone/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
-  Ancestor ancestorsOfDrone(@PathVariable int generation) {
+  public Ancestor ancestorsOfDrone(@PathVariable int generation) {
     logger.info(
         "Received request to find the number of ancestors of drone at generation {}",
         generation);
@@ -51,7 +58,7 @@ class BeekeeperController {
 
   @RequestMapping(value = "/queen/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
-  Ancestor ancestorsOfQueen(@PathVariable int generation) {
+  public Ancestor ancestorsOfQueen(@PathVariable int generation) {
     logger.info(
         "Received request to find the number of ancestors of queen at generation {}",
         generation);

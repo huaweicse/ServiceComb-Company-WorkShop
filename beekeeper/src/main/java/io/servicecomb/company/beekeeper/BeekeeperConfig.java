@@ -16,20 +16,18 @@
 
 package io.servicecomb.company.beekeeper;
 
-class Ancestor {
-  private long ancestors;
+import io.servicecomb.provider.pojo.RpcReference;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-  /**
-   * Default constructor for Json deserialization
-   */
-  Ancestor() {
-  }
+@Configuration
+class BeekeeperConfig {
 
-  Ancestor(long ancestors) {
-    this.ancestors = ancestors;
-  }
+  @RpcReference(microserviceName = "worker", schemaId = "fibonacciRpcEndpoint")
+  private FibonacciCalculator fibonacciCalculator;
 
-  public long getAncestors() {
-    return ancestors;
+  @Bean
+  BeekeeperService beekeeperService() {
+    return new BeekeeperServiceImpl(fibonacciCalculator);
   }
 }

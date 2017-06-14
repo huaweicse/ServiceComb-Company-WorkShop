@@ -30,6 +30,7 @@
   <modules>
     <module>worker-tests</module>
     <module>coverage-aggregate</module>
+    <module>beekeeper-tests</module>
   </modules>
 
 

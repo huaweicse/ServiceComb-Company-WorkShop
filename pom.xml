@@ -80,6 +80,16 @@
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>
+        <groupId>io.servicecomb.workshop.demo</groupId>
+        <artifactId>beekeeper</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>io.servicecomb.workshop.demo</groupId>
+        <artifactId>manager</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>com.github.seanyinx</groupId>
         <artifactId>unit-scaffolding</artifactId>
         <version>1.0.0</version>

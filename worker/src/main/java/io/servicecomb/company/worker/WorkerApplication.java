@@ -18,6 +18,7 @@ package io.servicecomb.company.worker;
 import io.servicecomb.springboot.starter.provider.EnableServiceComb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
@@ -31,6 +32,7 @@ public class WorkerApplication {
   // unless the active profile is not dev
   @EnableServiceComb
   @Profile("!dev")
-  class ServiceCombConfig {
+  @Configuration
+  static class ServiceCombConfig {
   }
 }

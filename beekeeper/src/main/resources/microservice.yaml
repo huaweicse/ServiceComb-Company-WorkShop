@@ -1,11 +1,13 @@
-APPLICATION_ID: company
+﻿APPLICATION_ID: company
 service_description:
-  name: fibonacciClient
+  name: beekeeper
   version: 0.0.1
 cse:
   service:
     registry:
       address: http://sc.servicecomb.io:9980
+  rest:
+    address: 0.0.0.0:8090
   handler:
     chain:
       Consumer:

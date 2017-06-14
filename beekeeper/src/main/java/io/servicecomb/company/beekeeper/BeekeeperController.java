@@ -33,9 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * their rest resources must be public or schema generation will fail.
  */
 @RestSchema(schemaId = "beekeeperRestEndpoint")
-@RequestMapping("/")
+@RequestMapping("/rest")
 @Controller
-class BeekeeperController {
+public class BeekeeperController {
 
   private static final Logger logger = LoggerFactory.getLogger(BeekeeperController.class);
 

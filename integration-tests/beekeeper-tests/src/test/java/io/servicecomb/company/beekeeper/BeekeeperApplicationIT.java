@@ -21,12 +21,11 @@ import static org.springframework.http.HttpStatus.OK;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -36,13 +35,14 @@ import org.springframework.test.context.junit4.SpringRunner;
     })
 public class BeekeeperApplicationIT {
 
-  @Autowired
-  private TestRestTemplate restTemplate;
+  private final RestTemplate restTemplate = new RestTemplate();
+
+  private final String serviceAddress = "http://localhost:8090";
 
   @Test
   public void getsAncestorsOfDroneAtGenerationN() {
     ResponseEntity<Ancestor> responseEntity = restTemplate.getForEntity(
-        "/drone/ancestors/{generation}",
+        serviceAddress + "/rest/drone/ancestors/{generation}",
         Ancestor.class,
         30);
 
@@ -53,7 +53,7 @@ public class BeekeeperApplicationIT {
   @Test
   public void getsAncestorsOfQueenAtGenerationN() {
     ResponseEntity<Ancestor> responseEntity = restTemplate.getForEntity(
-        "/queen/ancestors/{generation}",
+        serviceAddress + "/rest/queen/ancestors/{generation}",
         Ancestor.class,
         30);
 

@@ -50,7 +50,7 @@ public class BeekeeperControllerTest {
   public void getsAncestorsOfDroneUsingUnderlyingService() throws Exception {
     when(beekeeperService.ancestorsOfDroneAt(generation)).thenReturn(fibonacciValue);
 
-    mockMvc.perform(get("/drone/ancestors/{generation}", generation))
+    mockMvc.perform(get("/rest/drone/ancestors/{generation}", generation))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.ancestors", is(fibonacciValue)));
   }
@@ -59,7 +59,7 @@ public class BeekeeperControllerTest {
   public void getsAncestorsOfQueenUsingUnderlyingService() throws Exception {
     when(beekeeperService.ancestorsOfQueenAt(generation)).thenReturn(fibonacciValue);
 
-    mockMvc.perform(get("/queen/ancestors/{generation}", generation))
+    mockMvc.perform(get("/rest/queen/ancestors/{generation}", generation))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.ancestors", is(fibonacciValue)));
   }

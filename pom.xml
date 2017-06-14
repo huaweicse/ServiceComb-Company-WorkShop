@@ -27,6 +27,7 @@
   <modules>
     <module>manager</module>
     <module>doorman</module>
+    <module>beekeeper</module>
     <module>worker</module>
     <module>docker-build-config</module>
     <module>docker-run-config</module>

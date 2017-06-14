@@ -18,7 +18,21 @@ package io.servicecomb.company.beekeeper;
 
 interface BeekeeperService {
 
+  /**
+   * calculates the number of ancestors of a drone (male bee) at specified generation.
+   *
+   * @param generation the generation of bee ancestors at query
+   * @return the number of ancestors
+   * @see <a href="http://www.dave-cushman.net/bee/fibonacci.html">Drone Parent Numbers</a>
+   */
   long ancestorsOfDroneAt(int generation);
 
+  /**
+   * calculates the number of ancestors of a queen (female bee) at specified generation.
+   *
+   * @param generation the generation of bee ancestors at query
+   * @return the number of ancestors
+   * @see <a href="http://www.dave-cushman.net/bee/fibonacci.html">Drone Parent Numbers</a>
+   */
   long ancestorsOfQueenAt(int generation);
 }

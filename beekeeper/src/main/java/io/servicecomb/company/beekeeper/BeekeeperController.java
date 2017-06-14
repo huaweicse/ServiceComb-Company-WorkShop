@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestSchema(schemaId = "beekeeperRestEndpoint")
 @RequestMapping("/")
 @Controller
-public class BeekeeperController {
+class BeekeeperController {
 
   private static final Logger logger = LoggerFactory.getLogger(BeekeeperController.class);
 
@@ -46,6 +46,12 @@ public class BeekeeperController {
     this.beekeeperService = beekeeperService;
   }
 
+  /**
+   * calculates the number of ancestors of a drone (male bee) at specified generation.
+   *
+   * @param generation the generation of bee ancestors at query
+   * @return the number of ancestors
+   */
   @RequestMapping(value = "/drone/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public Ancestor ancestorsOfDrone(@PathVariable int generation) {
@@ -56,6 +62,12 @@ public class BeekeeperController {
     return new Ancestor(beekeeperService.ancestorsOfDroneAt(generation));
   }
 
+  /**
+   * calculates the number of ancestors of a queen (female bee) at specified generation.
+   *
+   * @param generation the generation of bee ancestors at query
+   * @return the number of ancestors
+   */
   @RequestMapping(value = "/queen/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public Ancestor ancestorsOfQueen(@PathVariable int generation) {

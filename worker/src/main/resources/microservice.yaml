@@ -1,5 +1,7 @@
-﻿APPLICATION_ID: company
+﻿# all interconnected microservices must belong to an application wth the same ID
+APPLICATION_ID: company
 service_description:
+# name of the declaring microservice
   name: worker
   version: 0.0.1
 cse:

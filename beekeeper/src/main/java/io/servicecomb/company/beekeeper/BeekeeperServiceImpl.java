@@ -16,6 +16,9 @@
 
 package io.servicecomb.company.beekeeper;
 
+/**
+ * Implements {@link BeekeeperService} to get fibonacci term from remote worker.
+ */
 class BeekeeperServiceImpl implements BeekeeperService {
 
   private final FibonacciCalculator fibonacciCalculator;
@@ -24,13 +27,20 @@ class BeekeeperServiceImpl implements BeekeeperService {
     this.fibonacciCalculator = fibonacciCalculator;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public long ancestorsOfDroneAt(int generation) {
     return fibonacciCalculator.term(generation);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public long ancestorsOfQueenAt(int generation) {
+    // please refer to the link in javadoc for the reason of + 2
     return fibonacciCalculator.term(generation + 2);
   }
 }

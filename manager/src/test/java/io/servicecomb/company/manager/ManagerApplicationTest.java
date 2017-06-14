@@ -17,10 +17,13 @@ package io.servicecomb.company.manager;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
+import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.manager.filters.FilterConstants.TOKEN_PREFIX;
 import static java.util.Collections.singletonList;
@@ -143,6 +146,17 @@ public class ManagerApplicationTest {
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     assertThat(responseEntity.getBody()).isEqualTo("1");
+
+    responseEntity = restTemplate.exchange(
+        "/worker/fibonacci/term?n=1",
+        GET,
+        validationRequest(token),
+        String.class);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    assertThat(responseEntity.getBody()).isEqualTo("1");
+
+    verify(exactly(1), getRequestedFor(urlEqualTo("/fibonacci/term?n=1")));
 
     Archive<Long> result = archive.search(1);
 

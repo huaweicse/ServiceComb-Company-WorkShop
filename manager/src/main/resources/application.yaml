@@ -6,6 +6,7 @@ zuul:
     worker:
       url: http://localhost:8082
 
+# disable netflix eurkea since it's not used for service discovery
 ribbon:
   eureka:
     enabled: false

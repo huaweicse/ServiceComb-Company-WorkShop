@@ -17,21 +17,20 @@ package io.servicecomb.company.auth.endpoint.rest;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.PASSWORD;
-import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN_PREFIX;
 import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.servicecomb.company.auth.AuthenticationService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,9 +45,17 @@ public class AuthenticationControllerTest {
   @MockBean
   private AuthenticationService authenticationService;
 
+  @MockBean
+  private AuthorizationHeaderGenerator headerGenerator;
+
   private final String password = uniquify("password");
   private final String username = uniquify("username");
   private final String token = uniquify("token");
+
+  @Before
+  public void setUp() throws Exception {
+    when(headerGenerator.generate(token)).thenReturn(new HttpHeaders());
+  }
 
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
@@ -60,7 +67,6 @@ public class AuthenticationControllerTest {
             .param(USERNAME, username)
             .param(PASSWORD, password))
         .andExpect(status().isOk())
-        .andExpect(header().string(AUTHORIZATION, TOKEN_PREFIX + token))
         .andExpect(content().string("Welcome, " + username));
   }
 

@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.auth.endpoint.rest;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -31,16 +30,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 class AuthenticationController {
 
-  static final String TOKEN_PREFIX = "Bearer ";
   static final String USERNAME = "username";
   static final String PASSWORD = "password";
   static final String TOKEN = "token";
 
   private final AuthenticationService authenticationService;
+  private final AuthorizationHeaderGenerator authorizationHeaderGenerator;
 
   @Autowired
-  AuthenticationController(AuthenticationService authenticationService) {
+  AuthenticationController(
+      AuthenticationService authenticationService,
+      AuthorizationHeaderGenerator authorizationHeaderGenerator) {
     this.authenticationService = authenticationService;
+    this.authorizationHeaderGenerator = authorizationHeaderGenerator;
   }
 
   @RequestMapping(value = "/login", method = POST)
@@ -49,8 +51,7 @@ class AuthenticationController {
       @RequestParam(PASSWORD) String password) {
 
     String token = authenticationService.authenticate(username, password);
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(AUTHORIZATION, TOKEN_PREFIX + token);
+    HttpHeaders headers = authorizationHeaderGenerator.generate(token);
 
     return new ResponseEntity<>("Welcome, " + username, headers, OK);
   }

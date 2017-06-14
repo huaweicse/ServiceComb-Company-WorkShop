@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager;
+package io.servicecomb.company.manager.filters;
 
-public interface Archive<V> {
+import com.netflix.zuul.context.RequestContext;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
-  V get();
+@Component
+class PathExtractor {
 
-  boolean exists();
+  String path(RequestContext context) {
+    HttpServletRequest request = context.getRequest();
+
+    String path = request.getContextPath() + request.getServletPath();
+    if (request.getPathInfo() != null) {
+      path = path + request.getPathInfo();
+    }
+
+    return path;
+  }
 }

@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager;
+package io.servicecomb.company.manager.archive;
 
-class HitArchive<V> implements Archive<V> {
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-  private final V value;
-
-  public HitArchive(V value) {
-    this.value = value;
-  }
-
-  @Override
-  public V get() {
-    return value;
-  }
-
-  @Override
-  public boolean exists() {
-    return true;
+@Configuration
+@EnableCaching
+class ProjectArchiveConfig {
+  @Bean
+  ProjectArchive<Integer, Long> projectArchive() {
+    return new ProjectArchive<>();
   }
 }

@@ -35,6 +35,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import io.servicecomb.company.manager.archive.Archive;
+import io.servicecomb.company.manager.archive.ProjectArchive;
 import java.net.URI;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -83,6 +85,9 @@ public class ManagerApplicationTest {
   @MockBean
   private LoadBalancerClient loadBalancer;
 
+  @Autowired
+  private ProjectArchive<Integer, Long> archive;
+
   @BeforeClass
   public static void setUp() throws Exception {
     stubFor(post(urlEqualTo("/login"))
@@ -126,7 +131,7 @@ public class ManagerApplicationTest {
   }
 
   @Test
-  public void validatesToken() {
+  public void validatesTokenAndCachesResult() {
     when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
     when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
 
@@ -138,6 +143,11 @@ public class ManagerApplicationTest {
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
     assertThat(responseEntity.getBody()).isEqualTo("1");
+
+    Archive<Long> result = archive.search(1);
+
+    assertThat(result.exists()).isTrue();
+    assertThat(result.get()).isEqualTo(1L);
   }
 
   @Test

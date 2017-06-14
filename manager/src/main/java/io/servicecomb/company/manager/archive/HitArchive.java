@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager;
+package io.servicecomb.company.manager.archive;
 
-import java.util.NoSuchElementException;
+class HitArchive<V> implements Archive<V> {
 
-public class MissArchive<V> implements Archive<V> {
+  private final V value;
 
-  private final String term;
-
-  public MissArchive(String term) {
-    this.term = term;
+  HitArchive(V value) {
+    this.value = value;
   }
 
   @Override
   public V get() {
-    throw new NoSuchElementException("No result found for search term " + term);
+    return value;
   }
 
   @Override
   public boolean exists() {
-    return false;
+    return true;
   }
 }

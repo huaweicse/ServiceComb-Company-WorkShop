@@ -17,6 +17,8 @@ package io.servicecomb.company.manager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.servicecomb.company.manager.archive.Archive;
+import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.junit.Test;
 
 public class ProjectArchiveTest {

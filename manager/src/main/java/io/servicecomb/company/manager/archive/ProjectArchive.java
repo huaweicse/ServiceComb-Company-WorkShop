@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.manager;
+package io.servicecomb.company.manager.archive;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 @CacheConfig(cacheNames = "projectArchive")
 public class ProjectArchive<K, V> {
+  private static final Logger logger = LoggerFactory.getLogger(ProjectArchive.class);
 
   @Cacheable
   public Archive<V> search(K key) {
+    logger.info("Cache miss with key: {}", key);
     return new MissArchive<>(key.toString());
   }
 
   @CachePut(key = "#key")
   public Archive<V> archive(K key, V value) {
+    logger.info("Updated cache with key {} and value {}", key, value);
     return new HitArchive<>(value);
   }
 }

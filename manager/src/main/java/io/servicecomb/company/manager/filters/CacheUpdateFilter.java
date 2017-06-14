@@ -16,6 +16,7 @@
 package io.servicecomb.company.manager.filters;
 
 import static com.netflix.zuul.constants.ZuulConstants.ZUUL_INITIAL_STREAM_BUFFER_SIZE;
+import static io.servicecomb.company.manager.filters.FilterConstants.FIBONACCI_PATH;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
@@ -80,7 +81,7 @@ class CacheUpdateFilter extends ZuulFilter {
   }
 
   private boolean isSuccessfulFibonacciResponse(RequestContext context, String path) {
-    return path.endsWith("/fibonacci/term")
+    return path.endsWith(FIBONACCI_PATH)
         && context.getResponseStatusCode() == SC_OK
         && context.sendZuulResponse()
         && (context.getResponseBody() != null || context.getResponseDataStream() != null);

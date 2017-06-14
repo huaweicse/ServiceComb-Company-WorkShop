@@ -15,6 +15,7 @@
  */
 package io.servicecomb.company.manager.filters;
 
+import static io.servicecomb.company.manager.filters.FilterConstants.FIBONACCI_PATH;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import com.netflix.zuul.ZuulFilter;
@@ -76,7 +77,7 @@ class CacheFetchFilter extends ZuulFilter {
   }
 
   private boolean isGenuineFibonacciRequest(RequestContext context, String path) {
-    return path.endsWith("/fibonacci/term") && context.sendZuulResponse();
+    return path.endsWith(FIBONACCI_PATH) && context.sendZuulResponse();
   }
 
   private void returnResultWithoutForwardingToZuul(RequestContext context, Long value) {

@@ -17,4 +17,5 @@ package io.servicecomb.company.manager.filters;
 
 public interface FilterConstants {
   String TOKEN_PREFIX = "Bearer ";
+  String FIBONACCI_PATH = "/fibonacci/term";
 }

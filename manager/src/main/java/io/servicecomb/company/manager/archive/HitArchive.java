@@ -15,6 +15,11 @@
  */
 package io.servicecomb.company.manager.archive;
 
+/**
+ * Represents cache hit of a cache entry.
+ *
+ * @param <V> the value of the cache entry
+ */
 class HitArchive<V> implements Archive<V> {
 
   private final V value;

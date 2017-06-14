@@ -17,6 +17,11 @@ package io.servicecomb.company.manager.archive;
 
 import java.util.NoSuchElementException;
 
+/**
+ * Represents cache miss of a cache entry.
+ *
+ * @param <V> value of the cache entry
+ */
 class MissArchive<V> implements Archive<V> {
 
   private final String term;

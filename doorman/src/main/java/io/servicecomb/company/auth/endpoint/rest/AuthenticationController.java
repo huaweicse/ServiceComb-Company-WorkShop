@@ -13,9 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
+package io.servicecomb.company.auth.endpoint.rest;
 
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import io.servicecomb.company.auth.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,22 +35,28 @@ class AuthenticationController {
   static final String TOKEN = "token";
 
   private final AuthenticationService authenticationService;
+  private final AuthorizationHeaderGenerator authorizationHeaderGenerator;
 
   @Autowired
-  AuthenticationController(AuthenticationService authenticationService) {
+  AuthenticationController(
+      AuthenticationService authenticationService,
+      AuthorizationHeaderGenerator authorizationHeaderGenerator) {
     this.authenticationService = authenticationService;
+    this.authorizationHeaderGenerator = authorizationHeaderGenerator;
   }
 
-  @RequestMapping("/login")
-  @ResponseBody
-  String login(
+  @RequestMapping(value = "/login", method = POST)
+  ResponseEntity<String> login(
       @RequestParam(USERNAME) String username,
       @RequestParam(PASSWORD) String password) {
 
-    return authenticationService.authenticate(username, password);
+    String token = authenticationService.authenticate(username, password);
+    HttpHeaders headers = authorizationHeaderGenerator.generate(token);
+
+    return new ResponseEntity<>("Welcome, " + username, headers, OK);
   }
 
-  @RequestMapping("/validate")
+  @RequestMapping(value = "/validate", method = POST)
   @ResponseBody
   String validate(@RequestParam(TOKEN) String token) {
 

@@ -22,11 +22,19 @@ import io.jsonwebtoken.Jwts;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+/**
+ * {@link JwtTokenStore} implements {@link TokenStore} with JWT token specifications.
+ */
 class JwtTokenStore implements TokenStore {
 
   private final String secretKey;
   private final int secondsToExpire;
 
+  /**
+   * Constructor
+   * @param secretKey the signing key to encrypt the token.
+   * @param secondsToExpire the expire time in seconds.
+   */
   JwtTokenStore(String secretKey, int secondsToExpire) {
     this.secretKey = secretKey;
     this.secondsToExpire = secondsToExpire;

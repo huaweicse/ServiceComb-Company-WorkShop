@@ -15,8 +15,6 @@
  */
 package io.servicecomb.company.auth;
 
-import io.jsonwebtoken.JwtException;
-
 class AuthenticationServiceImpl implements AuthenticationService {
 
   private final TokenStore tokenStore;

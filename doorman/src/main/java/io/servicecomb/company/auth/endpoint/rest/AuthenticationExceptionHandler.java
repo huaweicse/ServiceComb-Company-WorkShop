@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
+package io.servicecomb.company.auth.endpoint.rest;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
+import io.servicecomb.company.auth.UnauthorizedAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * {@link AuthenticationExceptionHandler} intercepts response with {@link
+ * UnauthorizedAccessException} and wraps the exception message in a forbidden response.
+ */
 @ControllerAdvice
 class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
 

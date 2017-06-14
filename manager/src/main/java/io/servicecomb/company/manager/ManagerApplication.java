@@ -1,4 +1,4 @@
-package io.servicecomb.company.auth;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,19 @@ package io.servicecomb.company.auth;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.manager;
 
-/**
- * {@link TokenStore} is a general interface responsible for token generation and parsing.
- */
-public interface TokenStore {
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-  /**
-   * Generates a token embedded with the username provided.
-   * @param username the username of requested user.
-   * @return the generated token.
-   */
-  String generate(String username);
+@SpringBootApplication
+@EnableCircuitBreaker
+@EnableZuulProxy
+public class ManagerApplication {
 
-  /**
-   * Parses a token if valid.
-   * Throws {@link TokenException} if the provided is not genuine.
-   * @param token the token.
-   * @return the username embedded in the token.
-   */
-  String parse(String token);
+  public static void main(String[] args) {
+    SpringApplication.run(ManagerApplication.class, args);
+  }
 }

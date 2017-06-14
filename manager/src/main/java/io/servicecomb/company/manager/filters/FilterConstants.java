@@ -1,4 +1,4 @@
-package io.servicecomb.company.auth;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,8 @@ package io.servicecomb.company.auth;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.manager.filters;
 
-/**
- * {@link TokenStore} is a general interface responsible for token generation and parsing.
- */
-public interface TokenStore {
-
-  /**
-   * Generates a token embedded with the username provided.
-   * @param username the username of requested user.
-   * @return the generated token.
-   */
-  String generate(String username);
-
-  /**
-   * Parses a token if valid.
-   * Throws {@link TokenException} if the provided is not genuine.
-   * @param token the token.
-   * @return the username embedded in the token.
-   */
-  String parse(String token);
+public interface FilterConstants {
+  String TOKEN_PREFIX = "Bearer ";
 }

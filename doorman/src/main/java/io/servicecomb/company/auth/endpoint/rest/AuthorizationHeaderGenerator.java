@@ -1,4 +1,4 @@
-package io.servicecomb.company.auth;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +14,21 @@ package io.servicecomb.company.auth;/*
  * limitations under the License.
  */
 
-/**
- * {@link TokenStore} is a general interface responsible for token generation and parsing.
- */
-public interface TokenStore {
+package io.servicecomb.company.auth.endpoint.rest;
 
-  /**
-   * Generates a token embedded with the username provided.
-   * @param username the username of requested user.
-   * @return the generated token.
-   */
-  String generate(String username);
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-  /**
-   * Parses a token if valid.
-   * Throws {@link TokenException} if the provided is not genuine.
-   * @param token the token.
-   * @return the username embedded in the token.
-   */
-  String parse(String token);
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
+
+@Component
+class AuthorizationHeaderGenerator {
+
+  static final String TOKEN_PREFIX = "Bearer ";
+
+  HttpHeaders generate(String token) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(AUTHORIZATION, TOKEN_PREFIX + token);
+    return headers;
+  }
 }

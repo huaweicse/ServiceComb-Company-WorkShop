@@ -13,19 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
+package io.servicecomb.company.auth.endpoint.rest;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
-import static io.servicecomb.company.auth.AuthenticationController.PASSWORD;
-import static io.servicecomb.company.auth.AuthenticationController.TOKEN;
-import static io.servicecomb.company.auth.AuthenticationController.USERNAME;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.PASSWORD;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN;
+import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
+import static io.servicecomb.company.auth.endpoint.rest.AuthorizationHeaderGenerator.TOKEN_PREFIX;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.servicecomb.company.DoormanApplication;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import org.junit.Test;
@@ -40,7 +43,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = {"company.auth.secret=someSecretKey"})
+@SpringBootTest(properties = {"company.auth.secret=someSecretKey"}, classes = DoormanApplication.class)
 @AutoConfigureMockMvc
 public class AuthenticationIntegrationTest {
 
@@ -64,9 +67,10 @@ public class AuthenticationIntegrationTest {
             .param(PASSWORD, password))
         .andExpect(status().isOk()).andReturn();
 
+    String tokenInHeader = result.getResponse().getHeader(AUTHORIZATION).replace(TOKEN_PREFIX, "");
     Claims token = Jwts.parser()
         .setSigningKey(secretKey)
-        .parseClaimsJws(result.getResponse().getContentAsString())
+        .parseClaimsJws(tokenInHeader)
         .getBody();
 
     assertThat(token.getSubject()).isEqualTo(username);
@@ -77,7 +81,7 @@ public class AuthenticationIntegrationTest {
     mockMvc.perform(
         MockMvcRequestBuilders.post("/validate")
             .contentType(APPLICATION_FORM_URLENCODED)
-            .param(TOKEN, result.getResponse().getContentAsString()))
+            .param(TOKEN, tokenInHeader))
         .andExpect(status().isOk());
   }
 

@@ -27,6 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Pre {@link ZuulFilter} to search cache for corresponding entry of provided fibonacci term. If a
+ * matching cache entry is found, return the cache value immediately without forwarding requests
+ * further to remote worker.
+ */
 @Component
 class CacheFetchFilter extends ZuulFilter {
 

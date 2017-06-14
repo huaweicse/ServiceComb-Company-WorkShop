@@ -33,6 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Post {@link ZuulFilter} to update cache entry when a fibonacci term is calculated.
+ */
 @Component
 class CacheUpdateFilter extends ZuulFilter {
 

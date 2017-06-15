@@ -19,14 +19,15 @@ package io.servicecomb.company.beekeeper;
 import static com.seanyinx.github.unit.scaffolding.Randomness.nextInt;
 import static com.seanyinx.github.unit.scaffolding.Randomness.nextLong;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-public class BeekeeperServiceTest {
+public class BeekeeperServiceImplTest {
 
-  private final int generation = nextInt(90);
+  private final int generation = nextInt(90) + 1;
   private final long fibonacciValue = nextLong();
 
   private final FibonacciCalculator fibonacciCalculator = mock(FibonacciCalculator.class);
@@ -34,7 +35,7 @@ public class BeekeeperServiceTest {
 
   @Test
   public void calculatesAncestorsOfDroneAtGenerationN() {
-    when(fibonacciCalculator.term(generation)).thenReturn(fibonacciValue);
+    when(fibonacciCalculator.term(generation + 1)).thenReturn(fibonacciValue);
 
     long ancestors = beekeeperService.ancestorsOfDroneAt(generation);
 
@@ -48,5 +49,13 @@ public class BeekeeperServiceTest {
     long ancestors = beekeeperService.ancestorsOfQueenAt(generation);
 
     assertThat(ancestors).isEqualTo(fibonacciValue);
+  }
+
+  @Test
+  public void ancestorsAtGeneration0Is0() {
+    when(fibonacciCalculator.term(anyInt())).thenReturn(1L);
+
+    assertThat(beekeeperService.ancestorsOfDroneAt(0)).isZero();
+    assertThat(beekeeperService.ancestorsOfQueenAt(0)).isZero();
   }
 }

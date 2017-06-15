@@ -44,10 +44,10 @@ public class BeekeeperApplicationIT {
     ResponseEntity<Ancestor> responseEntity = restTemplate.getForEntity(
         serviceAddress + "/rest/drone/ancestors/{generation}",
         Ancestor.class,
-        30);
+        2);
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
-    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(832040L);
+    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(2L);
   }
 
   @Test
@@ -55,10 +55,10 @@ public class BeekeeperApplicationIT {
     ResponseEntity<Ancestor> responseEntity = restTemplate.getForEntity(
         serviceAddress + "/rest/queen/ancestors/{generation}",
         Ancestor.class,
-        30);
+        2);
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
-    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(2178309L);
+    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(3L);
   }
 }
 

@@ -32,7 +32,10 @@ class BeekeeperServiceImpl implements BeekeeperService {
    */
   @Override
   public long ancestorsOfDroneAt(int generation) {
-    return fibonacciCalculator.term(generation);
+    if (generation <= 0) {
+      return 0;
+    }
+    return fibonacciCalculator.term(generation + 1);
   }
 
   /**
@@ -40,6 +43,9 @@ class BeekeeperServiceImpl implements BeekeeperService {
    */
   @Override
   public long ancestorsOfQueenAt(int generation) {
+    if (generation <= 0) {
+      return 0;
+    }
     // please refer to the link in javadoc for the reason of + 2
     return fibonacciCalculator.term(generation + 2);
   }

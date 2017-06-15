@@ -1,4 +1,4 @@
-package io.servicecomb.company.auth;/*
+/*
  * Copyright 2017 Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@ package io.servicecomb.company.auth;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.servicecomb.company.auth;
 
 public interface AuthenticationService {
   String authenticate(String username, String password);

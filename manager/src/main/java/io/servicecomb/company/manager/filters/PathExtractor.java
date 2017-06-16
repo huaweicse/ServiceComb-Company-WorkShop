@@ -16,6 +16,8 @@
 package io.servicecomb.company.manager.filters;
 
 import com.netflix.zuul.context.RequestContext;
+import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +26,27 @@ class PathExtractor {
 
   String path(RequestContext context) {
     HttpServletRequest request = context.getRequest();
+    StringBuilder builder = new StringBuilder();
 
-    String path = request.getContextPath() + request.getServletPath();
+    builder.append(request.getContextPath()).append(request.getServletPath());
     if (request.getPathInfo() != null) {
-      path = path + request.getPathInfo();
+      builder.append(request.getPathInfo());
     }
 
-    return path;
+    if (context.getRequestQueryParams() != null) {
+      appendQueryParams(context, builder);
+    }
+
+    return builder.toString();
+  }
+
+  private void appendQueryParams(RequestContext context, StringBuilder builder) {
+    List<String> queryParams = new LinkedList<>();
+
+    context.getRequestQueryParams()
+        .forEach((key, values) -> values
+            .forEach(value -> queryParams.add(key + "=" + value)));
+
+    builder.append("?").append(String.join("&", queryParams));
   }
 }

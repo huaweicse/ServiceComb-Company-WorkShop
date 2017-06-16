@@ -33,9 +33,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.servicecomb.company.manager.archive.Archive;
@@ -79,6 +81,7 @@ public class ManagerApplicationTest {
   private static final String unknownToken = uniquify("unknownToken");
   private static final String authorization = TOKEN_PREFIX + token;
   private static final String doormanAddress = "http://localhost:8082";
+  private static String ancestorJson = "{\"ancestors\": 2}";
 
   private final ServiceInstance serviceInstance = mock(ServiceInstance.class);
 
@@ -89,7 +92,7 @@ public class ManagerApplicationTest {
   private LoadBalancerClient loadBalancer;
 
   @Autowired
-  private ProjectArchive<Integer, Long> archive;
+  private ProjectArchive<String, String> archive;
 
   @BeforeClass
   public static void setUp() throws Exception {
@@ -119,6 +122,13 @@ public class ManagerApplicationTest {
             aResponse()
                 .withStatus(SC_OK)
                 .withBody("1")));
+
+    stubFor(get(urlEqualTo("/rest/drone/ancestors/2"))
+        .willReturn(
+            aResponse()
+                .withStatus(SC_OK)
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON_UTF8_VALUE)
+                .withBody(ancestorJson)));
   }
 
   @Test
@@ -134,7 +144,7 @@ public class ManagerApplicationTest {
   }
 
   @Test
-  public void validatesTokenAndCachesResult() {
+  public void validatesTokenAndCachesWorkerResult() {
     when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
     when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
 
@@ -158,10 +168,43 @@ public class ManagerApplicationTest {
 
     verify(exactly(1), getRequestedFor(urlEqualTo("/fibonacci/term?n=1")));
 
-    Archive<Long> result = archive.search(1);
+    Archive<String> result = archive.search("/worker/fibonacci/term?n=1");
 
     assertThat(result.exists()).isTrue();
-    assertThat(result.get()).isEqualTo(1L);
+    assertThat(result.get()).isEqualTo("1");
+  }
+
+  @Test
+  public void validatesTokenAndCachesBeekeeperResult() {
+    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
+    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
+
+    ResponseEntity<Ancestor> responseEntity = restTemplate.exchange(
+        "/beekeeper/rest/drone/ancestors/{generation}",
+        GET,
+        validationRequest(token),
+        Ancestor.class,
+        2);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(2L);
+
+    responseEntity = restTemplate.exchange(
+        "/beekeeper/rest/drone/ancestors/{generation}",
+        GET,
+        validationRequest(token),
+        Ancestor.class,
+        2);
+
+    assertThat(responseEntity.getStatusCode()).isEqualTo(OK);
+    assertThat(responseEntity.getBody().getAncestors()).isEqualTo(2L);
+
+    verify(exactly(1), getRequestedFor(urlEqualTo("/rest/drone/ancestors/2")));
+
+    Archive<String> result = archive.search("/beekeeper/rest/drone/ancestors/2");
+
+    assertThat(result.exists()).isTrue();
+    assertThat(result.get()).isEqualTo(ancestorJson);
   }
 
   @Test
@@ -207,5 +250,23 @@ public class ManagerApplicationTest {
     headers.add(AUTHORIZATION, TOKEN_PREFIX + token);
 
     return new HttpEntity<>(headers);
+  }
+
+  private static class Ancestor {
+    private long ancestors;
+
+    /**
+     * Default constructor for Json deserialization
+     */
+    Ancestor() {
+    }
+
+    Ancestor(long ancestors) {
+      this.ancestors = ancestors;
+    }
+
+    public long getAncestors() {
+      return ancestors;
+    }
   }
 }

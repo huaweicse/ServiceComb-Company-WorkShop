@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 class ProjectArchiveConfig {
   @Bean
-  ProjectArchive<Integer, Long> projectArchive() {
+  ProjectArchive<String, String> projectArchive() {
     return new ProjectArchive<>();
   }
 }

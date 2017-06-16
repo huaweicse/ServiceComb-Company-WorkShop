@@ -13,10 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.servicecomb.company.manager.filters;
 
-public interface FilterConstants {
-  String TOKEN_PREFIX = "Bearer ";
-  String FIBONACCI_PATH = "/fibonacci/term";
-  String ANCESTORS_PATH = "/ancestors";
+import static io.servicecomb.company.manager.filters.FilterConstants.ANCESTORS_PATH;
+
+import io.servicecomb.company.manager.archive.ProjectArchive;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+class BeekeeperCacheUpdateFilter extends CacheUpdateFilter {
+
+  @Autowired
+  BeekeeperCacheUpdateFilter(ProjectArchive<String, String> archive, PathExtractor pathExtractor) {
+    super(archive, pathExtractor);
+  }
+
+  @Override
+  protected String pathInRequest() {
+    return ANCESTORS_PATH;
+  }
+
+  @Override
+  public int filterOrder() {
+    return 1;
+  }
 }

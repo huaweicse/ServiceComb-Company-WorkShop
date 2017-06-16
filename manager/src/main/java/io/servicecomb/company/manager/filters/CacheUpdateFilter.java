@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 abstract class CacheUpdateFilter extends ZuulFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(BeekeeperCacheUpdateFilter.class);
+  private static final Logger logger = LoggerFactory.getLogger(CacheUpdateFilter.class);
   private static final DynamicIntProperty STREAM_BUFFER_SIZE = DynamicPropertyFactory
       .getInstance()
       .getIntProperty(ZUUL_INITIAL_STREAM_BUFFER_SIZE, 8192);

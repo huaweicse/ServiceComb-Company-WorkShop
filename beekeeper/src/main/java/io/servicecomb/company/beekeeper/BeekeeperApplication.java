@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.worker;
+
+package io.servicecomb.company.beekeeper;
 
 import io.servicecomb.springboot.starter.provider.EnableServiceComb;
 import org.springframework.boot.SpringApplication;
@@ -22,10 +23,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-public class WorkerApplication {
+public class BeekeeperApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(WorkerApplication.class, args);
+    SpringApplication.run(BeekeeperApplication.class, args);
   }
 
   // do not enable service registration/discovery and schema generation/registration

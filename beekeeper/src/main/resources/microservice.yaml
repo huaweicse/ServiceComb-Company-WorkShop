@@ -2,13 +2,19 @@
 APPLICATION_ID: company
 service_description:
 # name of the declaring microservice
-  name: worker
+  name: beekeeper
   version: 0.0.1
 cse:
   service:
     registry:
       address: http://sc.servicecomb.io:9980
-  grpc:
-    address: 0.0.0.0:9090
   rest:
-    address: 0.0.0.0:8080
+    address: 0.0.0.0:8090
+  handler:
+    chain:
+      Consumer:
+        default: bizkeeper-consumer,loadbalance
+  references:
+#  this one below must refer to the microservice name it communicates with
+    worker:
+      version-rule: 0.0.1

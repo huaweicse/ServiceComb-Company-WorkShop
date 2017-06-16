@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.servicecomb.company.manager.filters;
 
-import static io.servicecomb.company.manager.filters.FilterConstants.FIBONACCI_PATH;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -24,24 +25,19 @@ import io.servicecomb.company.manager.archive.Archive;
 import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
- * Pre {@link ZuulFilter} to search cache for corresponding entry of provided fibonacci term. If a
+ * Pre {@link ZuulFilter} to search cache for corresponding entry of provided key. If a
  * matching cache entry is found, return the cache value immediately without forwarding requests
- * further to remote worker.
+ * further to remote service.
  */
-@Component
-class CacheFetchFilter extends ZuulFilter {
+abstract class CacheFetchFilter extends ZuulFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(CacheFetchFilter.class);
-
-  private final ProjectArchive<Integer, Long> archive;
+  private final ProjectArchive<String, String> archive;
   private final PathExtractor pathExtractor;
 
-  @Autowired
-  CacheFetchFilter(ProjectArchive<Integer, Long> archive, PathExtractor pathExtractor) {
+  CacheFetchFilter(ProjectArchive<String, String> archive, PathExtractor pathExtractor) {
     this.archive = archive;
     this.pathExtractor = pathExtractor;
   }
@@ -49,11 +45,6 @@ class CacheFetchFilter extends ZuulFilter {
   @Override
   public String filterType() {
     return "pre";
-  }
-
-  @Override
-  public int filterOrder() {
-    return 2;
   }
 
   @Override
@@ -67,27 +58,36 @@ class CacheFetchFilter extends ZuulFilter {
   @Override
   public Object run() {
     RequestContext context = RequestContext.getCurrentContext();
+    String path = pathExtractor.path(context);
+    logger.info("Received request to " + requestDescription() + " at {}", path);
 
-    Integer term = Integer.valueOf(context.getRequestQueryParams().get("n").get(0));
-    logger.info("Received request to calculate fibonacci term {}", term);
-
-    Archive<Long> result = archive.search(term);
+    Archive<String> result = archive.search(path);
 
     if (result.exists()) {
-      logger.info("Found existing project archive with key {} and value {}", term, result.get());
-      returnResultWithoutForwardingToZuul(context, result.get());
+      logger.info("Found existing project archive with key {} and value {}", path, result.get());
+      returnResultWithoutForwardingToZuul(context, result.get(), responseContentType());
     }
 
     return null;
   }
 
+  protected abstract String requestDescription();
+
+  protected abstract String responseContentType();
+
+  protected abstract String pathInRequest();
+
   private boolean isGenuineFibonacciRequest(RequestContext context, String path) {
-    return path.endsWith(FIBONACCI_PATH) && context.sendZuulResponse();
+    return path.contains(pathInRequest()) && context.sendZuulResponse();
   }
 
-  private void returnResultWithoutForwardingToZuul(RequestContext context, Long value) {
+  private void returnResultWithoutForwardingToZuul(
+      RequestContext context,
+      String body,
+      String contentType) {
     context.setResponseStatusCode(SC_OK);
-    context.setResponseBody(value.toString());
+    context.getResponse().setHeader(CONTENT_TYPE, contentType);
+    context.setResponseBody(body);
     context.setSendZuulResponse(false);
   }
 }

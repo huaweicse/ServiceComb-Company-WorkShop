@@ -29,6 +29,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>worker-tests</module>
+    <module>beekeeper-tests</module>
     <module>coverage-aggregate</module>
   </modules>
 

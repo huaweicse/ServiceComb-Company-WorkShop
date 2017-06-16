@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
 
-public interface AuthenticationService {
-  String authenticate(String username, String password);
+package io.servicecomb.company.beekeeper;
 
-  String validate(String token);
+import io.servicecomb.provider.pojo.RpcReference;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+class BeekeeperConfig {
+
+  @RpcReference(microserviceName = "worker", schemaId = "fibonacciRpcEndpoint")
+  private FibonacciCalculator fibonacciCalculator;
+
+  @Bean
+  BeekeeperService beekeeperService() {
+    return new BeekeeperServiceImpl(fibonacciCalculator);
+  }
 }

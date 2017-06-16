@@ -13,10 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
 
-public interface AuthenticationService {
-  String authenticate(String username, String password);
+package io.servicecomb.company.beekeeper;
 
-  String validate(String token);
+class Ancestor {
+  private long ancestors;
+
+  /**
+   * Default constructor for Json deserialization
+   */
+  Ancestor() {
+  }
+
+  Ancestor(long ancestors) {
+    this.ancestors = ancestors;
+  }
+
+  public long getAncestors() {
+    return ancestors;
+  }
 }

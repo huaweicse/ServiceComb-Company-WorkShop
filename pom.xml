@@ -27,6 +27,7 @@
   <modules>
     <module>manager</module>
     <module>doorman</module>
+    <module>beekeeper</module>
     <module>worker</module>
     <module>docker-build-config</module>
     <module>docker-run-config</module>
@@ -76,6 +77,16 @@
       <dependency>
         <groupId>io.servicecomb.workshop.demo</groupId>
         <artifactId>doorman</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>io.servicecomb.workshop.demo</groupId>
+        <artifactId>beekeeper</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>io.servicecomb.workshop.demo</groupId>
+        <artifactId>manager</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
       <dependency>

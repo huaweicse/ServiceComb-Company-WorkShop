@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.servicecomb.company.manager.filters;
 
 import static com.netflix.zuul.constants.ZuulConstants.ZUUL_INITIAL_STREAM_BUFFER_SIZE;
-import static io.servicecomb.company.manager.filters.FilterConstants.FIBONACCI_PATH;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
@@ -30,25 +30,21 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
- * Post {@link ZuulFilter} to update cache entry when a fibonacci term is calculated.
+ * Post {@link ZuulFilter} to update cache entry with response body from remote service.
  */
-@Component
-class CacheUpdateFilter extends ZuulFilter {
+abstract class CacheUpdateFilter extends ZuulFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(CacheUpdateFilter.class);
   private static final DynamicIntProperty STREAM_BUFFER_SIZE = DynamicPropertyFactory
       .getInstance()
       .getIntProperty(ZUUL_INITIAL_STREAM_BUFFER_SIZE, 8192);
-
-  private final ProjectArchive<Integer, Long> archive;
+  private final ProjectArchive<String, String> archive;
   private final PathExtractor pathExtractor;
 
-  @Autowired
-  CacheUpdateFilter(ProjectArchive<Integer, Long> archive, PathExtractor pathExtractor) {
+  CacheUpdateFilter(
+      ProjectArchive<String, String> archive, PathExtractor pathExtractor) {
     this.archive = archive;
     this.pathExtractor = pathExtractor;
   }
@@ -56,11 +52,6 @@ class CacheUpdateFilter extends ZuulFilter {
   @Override
   public String filterType() {
     return "post";
-  }
-
-  @Override
-  public int filterOrder() {
-    return 0;
   }
 
   @Override
@@ -75,45 +66,39 @@ class CacheUpdateFilter extends ZuulFilter {
   @Override
   public Object run() {
     RequestContext context = RequestContext.getCurrentContext();
-    Integer fibonacciTerm = Integer.valueOf(context.getRequestQueryParams().get("n").get(0));
-    Long fibonacciValue = fibonacciInResponse(context);
 
-    logger.info("Updating cache with fibonacci term {} and value {}", fibonacciTerm, fibonacciValue);
-    archive.archive(fibonacciTerm, fibonacciValue);
+    archive.archive(pathExtractor.path(context), responseBodyOf(context));
     return null;
   }
 
   private boolean isSuccessfulFibonacciResponse(RequestContext context, String path) {
-    return path.endsWith(FIBONACCI_PATH)
+    return path.contains(pathInRequest())
         && context.getResponseStatusCode() == SC_OK
         && context.sendZuulResponse()
         && (context.getResponseBody() != null || context.getResponseDataStream() != null);
   }
 
-  private Long fibonacciInResponse(RequestContext context) {
-    Long value;
+  protected abstract String pathInRequest();
 
-    if (context.getResponseBody() != null) {
-      value = Long.valueOf(context.getResponseBody());
-    } else {
-      value = valueFromResponse(context);
-    }
-
-    return value;
-  }
-
-  private Long valueFromResponse(RequestContext context) {
-    Long value;
-
-    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(STREAM_BUFFER_SIZE.get())) {
-      IOUtils.copy(context.getResponseDataStream(), outputStream);
-      value = Long.valueOf(outputStream.toString());
-      context.setResponseBody(outputStream.toString());
+  private String responseBodyOf(RequestContext context) {
+    try {
+      if (context.getResponseBody() != null) {
+        return context.getResponseBody();
+      } else {
+        return responseBody(context);
+      }
     } catch (IOException e) {
       logger.error("Failed to read response body", e);
       context.setResponseStatusCode(SC_INTERNAL_SERVER_ERROR);
       throw new IllegalStateException("Failed to read response body", e);
     }
-    return value;
+  }
+
+  private String responseBody(RequestContext context) throws IOException {
+    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(STREAM_BUFFER_SIZE.get())) {
+      IOUtils.copy(context.getResponseDataStream(), outputStream);
+      context.setResponseBody(outputStream.toString());
+      return outputStream.toString();
+    }
   }
 }

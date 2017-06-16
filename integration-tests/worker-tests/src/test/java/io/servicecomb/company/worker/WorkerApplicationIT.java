@@ -66,7 +66,7 @@ public class WorkerApplicationIT {
   @EnableServiceComb
   static class WorkerTestApplication {
     // this annotation does not take effect in spring test
-    @RpcReference(microserviceName = "fibonacci", schemaId = "fibonacciRpcEndpoint")
+    @RpcReference(microserviceName = "worker", schemaId = "fibonacciRpcEndpoint")
     private FibonacciProvider fibonacciProvider;
 
     public static void main(String[] args) {

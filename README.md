@@ -8,6 +8,9 @@ understand demo is provided.
 * Manager (API gateway) 
 * Doorman (authentication service)
 * Worker (computing service)
+* Beekeeper (computing service)
 * Bulletin board (service registry)
 * Project archive (request cache)
 * Human resource (service governance)
+
+Please read the [blog post](http://servicecomb.io/docs/linuxcon-workshop-demo/) on the detailed explanation of this project.

@@ -16,7 +16,7 @@
 
 package io.servicecomb.company.beekeeper;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import io.servicecomb.provider.rest.common.RestSchema;
@@ -52,7 +52,7 @@ public class BeekeeperController {
    * @param generation the generation of bee ancestors at query
    * @return the number of ancestors
    */
-  @RequestMapping(value = "/drone/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
+  @RequestMapping(value = "/drone/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_VALUE)
   @ResponseBody
   public Ancestor ancestorsOfDrone(@PathVariable int generation) {
     logger.info(
@@ -68,7 +68,7 @@ public class BeekeeperController {
    * @param generation the generation of bee ancestors at query
    * @return the number of ancestors
    */
-  @RequestMapping(value = "/queen/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_UTF8_VALUE)
+  @RequestMapping(value = "/queen/ancestors/{generation}", method = GET, produces = APPLICATION_JSON_VALUE)
   @ResponseBody
   public Ancestor ancestorsOfQueen(@PathVariable int generation) {
     logger.info(

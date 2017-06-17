@@ -25,7 +25,19 @@ server:
 ---
 
 spring:
-    profiles: dev
+  profiles: sit
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+---
+
+spring:
+  profiles: dev
 hystrix:
   command:
     default:

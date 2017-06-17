@@ -1,0 +1,53 @@
+version: '2.1'
+
+services:
+  company-bulletin-board:
+    image: "servicecomb/service-center"
+    hostname: service.center
+    ports:
+      - "30100:30100"
+
+  company-worker:
+    image: "worker:0.0.1-SNAPSHOT"
+    hostname: worker
+    links:
+      - "company-bulletin-board:sc.servicecomb.io"
+    environment:
+      - ARTIFACT_ID=worker
+    ports:
+      - "7070:7070"
+      - "8080:8080"
+
+  company-doorman:
+    image: "doorman:0.0.1-SNAPSHOT"
+    hostname: doorman
+    links:
+      - "company-bulletin-board:sc.servicecomb.io"
+    environment:
+      - JAVA_OPTS=-Dcompany.auth.secret=someSecretKey
+      - ARTIFACT_ID=doorman
+    ports:
+      - "8081:8080"
+
+  company-beekeeper:
+    image: "beekeeper:0.0.1-SNAPSHOT"
+    hostname: beekeeper
+    links:
+      - "company-bulletin-board:sc.servicecomb.io"
+      - "company-worker"
+    environment:
+      - ARTIFACT_ID=beekeeper
+    command: sleep 60s
+    ports:
+      - "8082:8090"
+
+  company-manager:
+    image: "manager:0.0.1-SNAPSHOT"
+    hostname: manager
+    links:
+      - "company-bulletin-board:sc.servicecomb.io"
+    environment:
+      - JAVA_OPTS=-Dserver.port=8080 #-Dlogging.level.root=DEBUG
+      - ARTIFACT_ID=manager
+    ports:
+      - "8083:8080"

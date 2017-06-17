@@ -37,7 +37,7 @@
           <configuration>
             <images>
               <image>
-                <name>tank2428/servicecenter:0.1.0-m1</name>
+                <name>servicecomb/service-center</name>
                 <alias>service-center</alias>
                 <run>
                   <wait>

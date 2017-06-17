@@ -14,74 +14,36 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>company</artifactId>
+    <artifactId>integration-tests</artifactId>
     <groupId>io.servicecomb.workshop.demo</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>doorman</artifactId>
+  <artifactId>manager-tests</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>io.servicecomb</groupId>
-      <artifactId>spring-boot-starter-provider</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt</artifactId>
-      <version>0.7.0</version>
+      <groupId>io.servicecomb.workshop.demo</groupId>
+      <artifactId>manager</artifactId>
     </dependency>
 
-    <!--test dependencies-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.seanyinx</groupId>
-      <artifactId>unit-scaffolding</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>au.com.dius</groupId>
-      <artifactId>pact-jvm-provider-junit_2.11</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>au.com.dius</groupId>
-      <artifactId>pact-jvm-model_2.11</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <!-- mixin plugin configurations declared in another pom,
+      just like importing dependencies managed in another pom -->
       <plugin>
         <groupId>com.github.odavid.maven.plugins</groupId>
         <artifactId>mixin-maven-plugin</artifactId>
@@ -89,15 +51,11 @@
           <mixins>
             <mixin>
               <groupId>io.servicecomb.workshop.demo</groupId>
-              <artifactId>docker-build-config</artifactId>
+              <artifactId>docker-run-config</artifactId>
               <version>0.0.1-SNAPSHOT</version>
             </mixin>
           </mixins>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
@@ -105,19 +63,18 @@
   <profiles>
     <profile>
       <id>docker</id>
+      <properties>
+        <demo.service.name>doorman</demo.service.name>
+        <demo.vm.options>-Dcompany.auth.secret=someSecretKey</demo.vm.options>
+      </properties>
       <build>
         <plugins>
           <plugin>
             <groupId>io.fabric8</groupId>
             <artifactId>docker-maven-plugin</artifactId>
           </plugin>
-          <plugin>
-            <groupId>org.commonjava.maven.plugins</groupId>
-            <artifactId>directory-maven-plugin</artifactId>
-          </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
-
 </project>

@@ -42,12 +42,21 @@
     </dependency>
     <dependency>
       <groupId>io.servicecomb.workshop.demo</groupId>
+      <artifactId>manager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.servicecomb.workshop.demo</groupId>
       <artifactId>worker-tests</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.servicecomb.workshop.demo</groupId>
       <artifactId>beekeeper-tests</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>io.servicecomb.workshop.demo</groupId>
+      <artifactId>manager-tests</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>

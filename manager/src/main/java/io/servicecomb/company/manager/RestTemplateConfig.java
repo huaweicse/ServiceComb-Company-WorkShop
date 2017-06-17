@@ -13,26 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company;
 
-import io.servicecomb.springboot.starter.provider.EnableServiceComb;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package io.servicecomb.company.manager;
+
+import io.servicecomb.provider.springmvc.reference.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication
-public class DoormanApplication {
-
-  public static void main(String[] args) {
-    SpringApplication.run(DoormanApplication.class, args);
-  }
-
-  // do not enable service registration/discovery and schema generation/registration
-  // unless the active profile is not dev
-  @EnableServiceComb
-  @Profile("!dev")
-  @Configuration
-  static class ServiceCombConfig {
+@Configuration
+@Profile("!dev")
+class RestTemplateConfig {
+  @Bean
+  RestTemplate restTemplate() {
+    return RestTemplateBuilder.create();
   }
 }

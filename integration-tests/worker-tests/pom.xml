@@ -78,6 +78,7 @@
       <id>docker</id>
       <properties>
         <demo.service.name>worker</demo.service.name>
+        <demo.vm.options></demo.vm.options>
       </properties>
       <build>
         <plugins>

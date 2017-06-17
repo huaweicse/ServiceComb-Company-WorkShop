@@ -37,7 +37,7 @@
           <configuration>
             <images>
               <image>
-                <name>seanyinx/sc</name>
+                <name>tank2428/servicecenter:0.1.0-m1</name>
                 <alias>service-center</alias>
                 <run>
                   <wait>
@@ -45,7 +45,7 @@
                     <time>60000</time>
                   </wait>
                   <ports>
-                    <port>service.center.port:9980</port>
+                    <port>service.center.port:30100</port>
                   </ports>
                 </run>
               </image>
@@ -55,7 +55,7 @@
                 <run>
                   <env>
                     <JAVA_OPTS>
-                      -Dcse.service.publishAddress=${docker.hostname}
+                      -Dcse.service.publishAddress=${docker.hostname} ${demo.vm.options}
                     </JAVA_OPTS>
                     <ARTIFACT_ID>${demo.service.name}</ARTIFACT_ID>
                   </env>

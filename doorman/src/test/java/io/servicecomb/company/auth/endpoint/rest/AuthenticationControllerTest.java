@@ -20,9 +20,12 @@ import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController
 import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.servicecomb.company.auth.AuthenticationService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +36,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AuthenticationController.class)
@@ -51,6 +53,7 @@ public class AuthenticationControllerTest {
   private final String password = uniquify("password");
   private final String username = uniquify("username");
   private final String token = uniquify("token");
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Before
   public void setUp() throws Exception {
@@ -62,7 +65,7 @@ public class AuthenticationControllerTest {
     when(authenticationService.authenticate(username, password)).thenReturn(token);
 
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/login")
+        post("/rest/login")
             .contentType(APPLICATION_FORM_URLENCODED)
             .param(USERNAME, username)
             .param(PASSWORD, password))
@@ -75,9 +78,9 @@ public class AuthenticationControllerTest {
     when(authenticationService.validate(token)).thenReturn(username);
 
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/validate")
-            .contentType(APPLICATION_FORM_URLENCODED)
-            .param("token", token))
+        post("/rest/validate")
+            .contentType(APPLICATION_JSON_UTF8_VALUE)
+            .content(objectMapper.writeValueAsBytes(new Token(token))))
         .andExpect(status().isOk())
         .andExpect(content().string(username));
   }

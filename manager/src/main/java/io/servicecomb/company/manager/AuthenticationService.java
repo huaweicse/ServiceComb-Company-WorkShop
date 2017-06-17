@@ -22,15 +22,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,16 +39,15 @@ import org.springframework.web.client.RestTemplate;
 public class AuthenticationService {
 
   private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+  private static final String DOORMAN_ADDRESS = "cse://doorman";
 
   private final RestTemplate restTemplate;
-  private final LoadBalancerClient loadBalancer;
 
   @Autowired
-  AuthenticationService(LoadBalancerClient loadBalancer) {
-    this.loadBalancer = loadBalancer;
-    restTemplate = new RestTemplate();
+  AuthenticationService(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
 
-    restTemplate.setErrorHandler(new ResponseErrorHandler() {
+    this.restTemplate.setErrorHandler(new ResponseErrorHandler() {
       @Override
       public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
         return false;
@@ -65,8 +61,9 @@ public class AuthenticationService {
 
   @HystrixCommand(fallbackMethod = "timeout")
   public ResponseEntity<String> validate(String token) {
+    logger.info("Validating token {}", token);
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-        doormanAddress() + "/validate",
+        DOORMAN_ADDRESS + "/rest/validate",
         validationRequest(token),
         String.class
     );
@@ -83,17 +80,10 @@ public class AuthenticationService {
     return new ResponseEntity<>(REQUEST_TIMEOUT);
   }
 
-  private String doormanAddress() {
-    return loadBalancer.choose("doorman").getUri().toString();
-  }
-
-  private HttpEntity<MultiValueMap<String, String>> validationRequest(String token) {
+  private HttpEntity<Token> validationRequest(String token) {
     HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.add("token", token);
-
-    return new HttpEntity<>(map, headers);
+    return new HttpEntity<>(new Token(token), headers);
   }
 }

@@ -18,6 +18,8 @@ package io.servicecomb.company.auth.endpoint.rest;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import io.servicecomb.company.auth.UnauthorizedAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,8 +32,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
 
+  private static final Logger logger = LoggerFactory.getLogger(AuthenticationExceptionHandler.class);
+
   @ExceptionHandler(UnauthorizedAccessException.class)
   ResponseEntity<String> handleException(UnauthorizedAccessException e) {
+    logger.warn("Authentication failure", e);
     return new ResponseEntity<>(e.getMessage(), FORBIDDEN);
   }
 }

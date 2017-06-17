@@ -22,13 +22,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.REQUEST_TIMEOUT;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.seanyinx.github.unit.scaffolding.Randomness;
-import java.net.URI;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -36,15 +33,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 public class AuthenticationServiceTest {
   @ClassRule
   public static final WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
@@ -52,19 +48,16 @@ public class AuthenticationServiceTest {
   private final String username = Randomness.uniquify("username");
   private final String token = Randomness.uniquify("token");
 
-  private final ServiceInstance serviceInstance = mock(ServiceInstance.class);
-
-  private final String doormanAddress = "http://localhost:" + wireMockRule.port();
-
-  @MockBean
-  private LoadBalancerClient loadBalancer;
+  @Autowired
+  private FixedUrlRestTemplate restTemplate;
 
   @Autowired
   private AuthenticationService authenticationService;
 
   @Before
   public void setUp() throws Exception {
-    stubFor(post(urlEqualTo("/validate"))
+    restTemplate.setUrl("http://localhost:" + wireMockRule.port() + "/rest/validate");
+    stubFor(post(urlEqualTo("/rest/validate"))
         .willReturn(
             aResponse()
                 .withFixedDelay(2000)
@@ -74,9 +67,6 @@ public class AuthenticationServiceTest {
 
   @Test
   public void timesOutWhenDoormanIsUnresponsive() {
-    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
-    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
-
     ResponseEntity<String> responseEntity = authenticationService.validate(token);
 
     assertThat(responseEntity.getStatusCode()).isEqualTo(REQUEST_TIMEOUT);

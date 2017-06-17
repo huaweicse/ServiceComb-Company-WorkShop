@@ -20,6 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.exactly;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
@@ -30,19 +31,17 @@ import static java.util.Collections.singletonList;
 import static org.apache.http.HttpStatus.SC_FORBIDDEN;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.servicecomb.company.manager.archive.Archive;
 import io.servicecomb.company.manager.archive.ProjectArchive;
-import java.net.URI;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -50,14 +49,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -66,9 +63,11 @@ import org.springframework.util.MultiValueMap;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
     properties = {
         "zuul.routes.doorman.url=http://localhost:8082",
+        "zuul.routes.beekeeper.url=http://localhost:8082",
         "zuul.routes.worker.url=http://localhost:8082"
     }
 )
+@ActiveProfiles("dev")
 public class ManagerApplicationTest {
 
   @ClassRule
@@ -80,23 +79,17 @@ public class ManagerApplicationTest {
   private static final String token = uniquify("token");
   private static final String unknownToken = uniquify("unknownToken");
   private static final String authorization = TOKEN_PREFIX + token;
-  private static final String doormanAddress = "http://localhost:8082";
   private static String ancestorJson = "{\"ancestors\": 2}";
-
-  private final ServiceInstance serviceInstance = mock(ServiceInstance.class);
 
   @Autowired
   private TestRestTemplate restTemplate;
-
-  @MockBean
-  private LoadBalancerClient loadBalancer;
 
   @Autowired
   private ProjectArchive<String, String> archive;
 
   @BeforeClass
   public static void setUp() throws Exception {
-    stubFor(post(urlEqualTo("/login"))
+    stubFor(post(urlEqualTo("/rest/login"))
         .withRequestBody(containing("username=" + validUsername))
         .willReturn(
             aResponse()
@@ -104,15 +97,15 @@ public class ManagerApplicationTest {
                 .withStatus(SC_OK)
                 .withBody(token)));
 
-    stubFor(post(urlEqualTo("/validate"))
-        .withRequestBody(containing("token=" + token))
+    stubFor(post(urlEqualTo("/rest/validate"))
+        .withRequestBody(matchingJsonPath("$.[?($.token == '" + token + "')]"))
         .willReturn(
             aResponse()
                 .withStatus(SC_OK)
                 .withBody(validUsername)));
 
-    stubFor(post(urlEqualTo("/validate"))
-        .withRequestBody(containing("token=" + unknownToken))
+    stubFor(post(urlEqualTo("/rest/validate"))
+        .withRequestBody(matchingJsonPath("$.[?($.token == '" + unknownToken + "')]"))
         .willReturn(
             aResponse()
                 .withStatus(SC_FORBIDDEN)));
@@ -121,6 +114,7 @@ public class ManagerApplicationTest {
         .willReturn(
             aResponse()
                 .withStatus(SC_OK)
+                .withHeader(CONTENT_TYPE, TEXT_PLAIN_VALUE)
                 .withBody("1")));
 
     stubFor(get(urlEqualTo("/rest/drone/ancestors/2"))
@@ -134,7 +128,7 @@ public class ManagerApplicationTest {
   @Test
   public void returnsTokenToAuthenticatedUser() throws Exception {
     ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-        "/doorman/login",
+        "/doorman/rest/login",
         loginRequest(validUsername),
         String.class);
 
@@ -145,9 +139,6 @@ public class ManagerApplicationTest {
 
   @Test
   public void validatesTokenAndCachesWorkerResult() {
-    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
-    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
-
     ResponseEntity<String> responseEntity = restTemplate.exchange(
         "/worker/fibonacci/term?n=1",
         GET,
@@ -176,9 +167,6 @@ public class ManagerApplicationTest {
 
   @Test
   public void validatesTokenAndCachesBeekeeperResult() {
-    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
-    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
-
     ResponseEntity<Ancestor> responseEntity = restTemplate.exchange(
         "/beekeeper/rest/drone/ancestors/{generation}",
         GET,
@@ -209,9 +197,6 @@ public class ManagerApplicationTest {
 
   @Test
   public void forbidsRequestsWithoutToken() {
-    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
-    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
-
     ResponseEntity<String> responseEntity = restTemplate.getForEntity(
         "/worker/fibonacci/term?n=1",
         String.class);
@@ -221,9 +206,6 @@ public class ManagerApplicationTest {
 
   @Test
   public void forbidsRequestsWithUnknownToken() {
-    when(loadBalancer.choose("doorman")).thenReturn(serviceInstance);
-    when(serviceInstance.getUri()).thenReturn(URI.create(doormanAddress));
-
     ResponseEntity<String> responseEntity = restTemplate.exchange(
         "/worker/fibonacci/term?n=1",
         GET,
@@ -253,6 +235,7 @@ public class ManagerApplicationTest {
   }
 
   private static class Ancestor {
+
     private long ancestors;
 
     /**

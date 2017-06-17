@@ -43,7 +43,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
     try {
       return tokenStore.parse(token);
     } catch (TokenException e) {
-      throw new UnauthorizedAccessException("No user matches such a token " + token);
+      throw new UnauthorizedAccessException("No user matches such a token " + token, e);
     }
   }
 }

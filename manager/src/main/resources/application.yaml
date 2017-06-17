@@ -1,14 +1,49 @@
 zuul:
   routes:
     doorman:
+      serviceId: doorman
+      sensitiveHeaders:
+    worker:
+      serviceId: worker
+    beekeeper:
+      serviceId: beekeeper
+
+# disable netflix eurkea since it's not used for service discovery
+ribbon:
+  eureka:
+    enabled: false
+
+spring:
+  cloud:
+    cse:
+      host: 127.0.0.1
+      port: 30100
+
+server:
+  port: 0
+
+---
+
+spring:
+    profiles: dev
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+logging:
+  level:
+    root: INFO
+
+zuul:
+  routes:
+    doorman:
       url: http://localhost:8082
       sensitiveHeaders:
     worker:
       url: http://localhost:8082
     beekeeper:
       url: http://localhost:8082
-
-# disable netflix eurkea since it's not used for service discovery
-ribbon:
-  eureka:
-    enabled: false

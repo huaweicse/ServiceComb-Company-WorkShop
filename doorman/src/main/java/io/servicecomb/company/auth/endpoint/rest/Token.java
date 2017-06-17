@@ -13,15 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
 
-public class UnauthorizedAccessException extends RuntimeException {
+package io.servicecomb.company.auth.endpoint.rest;
 
-  public UnauthorizedAccessException(String message) {
-    super(message);
+class Token {
+  private String token;
+
+  Token() {
   }
 
-  public UnauthorizedAccessException(String message, Throwable e) {
-    super(message, e);
+  Token(String token) {
+    this.token = token;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  @Override
+  public String toString() {
+    return "Token{" +
+        "token='" + token + '\'' +
+        '}';
   }
 }

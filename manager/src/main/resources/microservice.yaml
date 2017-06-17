@@ -2,13 +2,10 @@
 APPLICATION_ID: company
 service_description:
 # name of the declaring microservice
-  name: worker
+  name: manager
   version: 0.0.1
 cse:
   service:
     registry:
       address: http://sc.servicecomb.io:30100
-  highway:
-    address: 0.0.0.0:7070
-  rest:
-    address: 0.0.0.0:8080
+

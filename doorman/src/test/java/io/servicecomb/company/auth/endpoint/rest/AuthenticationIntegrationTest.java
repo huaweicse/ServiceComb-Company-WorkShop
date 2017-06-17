@@ -17,15 +17,17 @@ package io.servicecomb.company.auth.endpoint.rest;
 
 import static com.seanyinx.github.unit.scaffolding.Randomness.uniquify;
 import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.PASSWORD;
-import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.TOKEN;
 import static io.servicecomb.company.auth.endpoint.rest.AuthenticationController.USERNAME;
 import static io.servicecomb.company.auth.endpoint.rest.AuthorizationHeaderGenerator.TOKEN_PREFIX;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.servicecomb.company.DoormanApplication;
@@ -37,14 +39,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = {"company.auth.secret=someSecretKey"}, classes = DoormanApplication.class)
 @AutoConfigureMockMvc
+@ActiveProfiles("dev")
 public class AuthenticationIntegrationTest {
 
   private static final String password = "password";
@@ -56,12 +59,14 @@ public class AuthenticationIntegrationTest {
   @Value("${company.auth.secret}")
   private String secretKey;
 
+  private final ObjectMapper objectMapper = new ObjectMapper();
+
   @Test
   public void returnsTokenOfAuthenticatedUser() throws Exception {
     ZonedDateTime loginTime = ZonedDateTime.now().truncatedTo(SECONDS);
 
     MvcResult result = mockMvc.perform(
-        MockMvcRequestBuilders.post("/login")
+        post("/rest/login")
             .contentType(APPLICATION_FORM_URLENCODED)
             .param(USERNAME, username)
             .param(PASSWORD, password))
@@ -79,16 +84,16 @@ public class AuthenticationIntegrationTest {
         .isBeforeOrEqualsTo(Date.from(ZonedDateTime.now().plusDays(1).toInstant()));
 
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/validate")
-            .contentType(APPLICATION_FORM_URLENCODED)
-            .param(TOKEN, tokenInHeader))
+        post("/rest/validate")
+            .contentType(APPLICATION_JSON_UTF8_VALUE)
+            .content(objectMapper.writeValueAsBytes(tokenInHeader)))
         .andExpect(status().isOk());
   }
 
   @Test
   public void forbidsAccessOfInvalidUser() throws Exception {
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/login")
+        post("/rest/login")
             .contentType(APPLICATION_FORM_URLENCODED)
             .param(USERNAME, uniquify("invalid-user"))
             .param(PASSWORD, uniquify("password")))

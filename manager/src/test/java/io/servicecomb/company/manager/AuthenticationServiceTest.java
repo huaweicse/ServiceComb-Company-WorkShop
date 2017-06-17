@@ -38,7 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties = "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=500")
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 public class AuthenticationServiceTest {

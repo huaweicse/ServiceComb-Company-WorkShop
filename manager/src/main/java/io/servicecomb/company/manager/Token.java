@@ -19,9 +19,6 @@ package io.servicecomb.company.manager;
 class Token {
   private String token;
 
-  Token() {
-  }
-
   Token(String token) {
     this.token = token;
   }

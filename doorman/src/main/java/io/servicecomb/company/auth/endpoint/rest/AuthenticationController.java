@@ -42,7 +42,6 @@ public class AuthenticationController {
 
   static final String USERNAME = "username";
   static final String PASSWORD = "password";
-  static final String TOKEN = "token";
 
   private final AuthenticationService authenticationService;
   private final AuthorizationHeaderGenerator authorizationHeaderGenerator;

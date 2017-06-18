@@ -14,3 +14,18 @@ understand demo is provided.
 * Human resource (service governance)
 
 Please read the [blog post](http://servicecomb.io/docs/linuxcon-workshop-demo/) on the detailed explanation of this project.
+
+## Run Services
+A `docker-compose.yaml` file is provided to start all services an their dependencies as docker containers.
+1. Build all service images using command `mvn package -Pdocker`
+1. Run all service images using command `docker-compose up`
+
+If you are using [Docker Toolbox](https://www.docker.com/products/docker-toolbox), please add an extra profile `-Pdocker-machine`.
+
+```mvn package -Pdocker -Pdocker-machine```
+
+## Run Integration Tests
+
+```
+mvn verify -Pdocker -Pdocker-machine
+```

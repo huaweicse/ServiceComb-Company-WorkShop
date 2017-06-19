@@ -5,5 +5,7 @@ language: java
 services:
   - docker
 
+install: true
+
 script:
   - mvn clean install -Ddocker.useColor=false -Ddocker.showLogs -Pdocker -Pjacoco coveralls:report -Phw-staging --settings maven.settings.xml

@@ -16,7 +16,6 @@
 
 package io.servicecomb.company.manager;
 
-import io.servicecomb.provider.springmvc.reference.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -27,6 +26,6 @@ import org.springframework.web.client.RestTemplate;
 class RestTemplateConfig {
   @Bean
   RestTemplate restTemplate() {
-    return RestTemplateBuilder.create();
+    return new RestTemplate();
   }
 }

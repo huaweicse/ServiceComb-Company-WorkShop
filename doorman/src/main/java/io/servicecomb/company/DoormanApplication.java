@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company;
 
-import io.servicecomb.springboot.starter.provider.EnableServiceComb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +29,6 @@ public class DoormanApplication {
 
   // do not enable service registration/discovery and schema generation/registration
   // unless the active profile is not dev
-  @EnableServiceComb
   @Profile("!dev")
   @Configuration
   static class ServiceCombConfig {

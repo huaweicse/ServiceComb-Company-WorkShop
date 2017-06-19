@@ -16,14 +16,12 @@
 
 package io.servicecomb.company.beekeeper;
 
-import io.servicecomb.provider.pojo.RpcReference;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class BeekeeperConfig {
 
-  @RpcReference(microserviceName = "worker", schemaId = "fibonacciRpcEndpoint")
   private FibonacciCalculator fibonacciCalculator;
 
   @Bean

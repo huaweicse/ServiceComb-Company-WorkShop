@@ -16,13 +16,11 @@
 package io.servicecomb.company.worker;
 
 
-import io.servicecomb.provider.pojo.RpcSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * {@link FibonacciRpcEndpoint} provides the RPC implementation of {@link FibonacciEndpoint}.
  */
-@RpcSchema(schemaId = "fibonacciRpcEndpoint")
 // class modifier has to be public, or producer invoker will fail to access it
 public class FibonacciRpcEndpoint implements FibonacciEndpoint {
 

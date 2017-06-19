@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.worker;
 
-import io.servicecomb.provider.rest.common.RestSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * {@link FibonacciRestEndpoint} provides the rest implementation of {@link FibonacciEndpoint}.
  * The rest endpoint is accessed by /fibonacci/term?n={value} with HTTP GET.
  */
-@RestSchema(schemaId = "fibonacciRestEndpoint")
 @RequestMapping("/fibonacci")
 @Controller
 public class FibonacciRestEndpoint implements FibonacciEndpoint {

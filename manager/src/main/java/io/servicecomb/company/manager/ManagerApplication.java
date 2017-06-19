@@ -15,7 +15,6 @@
  */
 package io.servicecomb.company.manager;
 
-import io.servicecomb.springboot.starter.provider.EnableServiceComb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -35,7 +34,6 @@ public class ManagerApplication {
 
   // do not enable service registration/discovery and schema generation/registration
   // unless the active profile is not dev
-  @EnableServiceComb
   @EnableDiscoveryClient
   @Profile("!dev")
   @Configuration

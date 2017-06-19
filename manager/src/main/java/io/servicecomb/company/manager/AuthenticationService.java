@@ -39,7 +39,7 @@ import org.springframework.web.client.RestTemplate;
 public class AuthenticationService {
 
   private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-  private static final String DOORMAN_ADDRESS = "cse://doorman";
+  private static final String DOORMAN_ADDRESS = "http://localhost:8081";
 
   private final RestTemplate restTemplate;
 

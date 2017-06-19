@@ -21,7 +21,6 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import io.servicecomb.company.auth.AuthenticationService;
-import io.servicecomb.provider.rest.common.RestSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@RestSchema(schemaId = "authenticationRestEndpoint")
 @Controller
 @RequestMapping("/rest")
 public class AuthenticationController {

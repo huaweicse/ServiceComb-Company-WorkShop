@@ -18,7 +18,7 @@ services:
       - "7070:7070"
       - "8080:8080"
     healthcheck:
-        test: ["CMD-SHELL", "nc -z localhost 8080 &> /dev/null; echo $$?"]
+        test: ["CMD-SHELL", "nc -z localhost 7070 &> /dev/null; echo $$?"]
         interval: 30s
         timeout: 10s
         retries: 5

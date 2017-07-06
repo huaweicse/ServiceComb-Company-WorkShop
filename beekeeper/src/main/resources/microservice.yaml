@@ -13,7 +13,15 @@ cse:
   handler:
     chain:
       Consumer:
-        default: bizkeeper-consumer,loadbalance
+        default: tracing-consumer,bizkeeper-consumer,loadbalance
+      Provider:
+        default: tracing-provider,bizkeeper-provider
+
+servicecomb:
+  tracing:
+    collector:
+      address: http://zipkin.io:9411/api/v1/spans
+
   references:
 #  this one below must refer to the microservice name it communicates with
     worker:

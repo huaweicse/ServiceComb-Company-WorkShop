@@ -1,6 +1,11 @@
 version: '2.1'
 
 services:
+  zipkin:
+    image: "openzipkin/zipkin"
+    hostname: zipkin
+    ports:
+      - "9411:9411"
   company-bulletin-board:
     image: "servicecomb/service-center"
     hostname: service.center
@@ -12,6 +17,7 @@ services:
     hostname: worker
     links:
       - "company-bulletin-board:sc.servicecomb.io"
+      - "zipkin:zipkin.io"
     environment:
       - ARTIFACT_ID=worker
     ports:
@@ -28,6 +34,7 @@ services:
     hostname: doorman
     links:
       - "company-bulletin-board:sc.servicecomb.io"
+      - "zipkin:zipkin.io"
     environment:
       - JAVA_OPTS=-Dcompany.auth.secret=someSecretKey
       - ARTIFACT_ID=doorman
@@ -39,6 +46,7 @@ services:
     hostname: beekeeper
     links:
       - "company-bulletin-board:sc.servicecomb.io"
+      - "zipkin:zipkin.io"
       - "company-worker"
     environment:
       - ARTIFACT_ID=beekeeper
@@ -53,6 +61,7 @@ services:
     hostname: manager
     links:
       - "company-bulletin-board:sc.servicecomb.io"
+      - "zipkin:zipkin.io"
     environment:
       - JAVA_OPTS=-Dserver.port=8080 #-Dlogging.level.root=DEBUG
       - ARTIFACT_ID=manager

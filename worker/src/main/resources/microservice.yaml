@@ -12,3 +12,12 @@ cse:
     address: 0.0.0.0:7070
   rest:
     address: 0.0.0.0:8080
+  handler:
+    chain:
+      Provider:
+        default: tracing-provider,bizkeeper-provider
+
+servicecomb:
+  tracing:
+    collector:
+      address: http://zipkin.io:9411/api/v1/spans

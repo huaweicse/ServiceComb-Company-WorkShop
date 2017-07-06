@@ -8,4 +8,15 @@ cse:
   service:
     registry:
       address: http://sc.servicecomb.io:30100
+  handler:
+    chain:
+      Provider:
+        default: tracing-provider
+      Consumer:
+        default: tracing-consumer,loadbalance
+
+servicecomb:
+  tracing:
+    collector:
+      address: http://zipkin.io:9411/api/v1/spans
 

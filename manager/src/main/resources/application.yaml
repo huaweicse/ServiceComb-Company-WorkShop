@@ -25,6 +25,14 @@ spring:
 server:
   port: 0
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
 ---
 
 spring:
@@ -35,7 +43,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5000
+            timeoutInMilliseconds: 10000
 
 ---
 

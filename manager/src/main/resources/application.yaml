@@ -26,6 +26,9 @@ server:
   port: 0
 
 hystrix:
+  execution:
+    isolation:
+      strategy: THREAD
   command:
     default:
       execution:

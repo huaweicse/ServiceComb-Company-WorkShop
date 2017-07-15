@@ -45,8 +45,17 @@
       <artifactId>spring-boot-starter-discovery</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.zipkin.java</groupId>
+      <artifactId>zipkin</artifactId>
+      <version>1.24.0</version>
+    </dependency>
+    <dependency>
       <groupId>io.servicecomb</groupId>
       <artifactId>handler-tracing-zipkin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.servicecomb</groupId>
+      <artifactId>spring-cloud-zuul-zipkin</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>

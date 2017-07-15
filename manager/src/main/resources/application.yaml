@@ -18,9 +18,6 @@ spring:
     cse:
       host: 127.0.0.1
       port: 30100
-  zipkin:
-    baseUrl: http://zipkin.io:9411
-    enabled: true
 
 server:
   port: 0

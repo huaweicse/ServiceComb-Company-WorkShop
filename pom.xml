@@ -167,6 +167,13 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>io.zipkin.java</groupId>
+      <artifactId>zipkin</artifactId>
+      <version>1.24.0</version>
+    </dependency>
+  </dependencies>
   <build>
     <pluginManagement>
       <plugins>

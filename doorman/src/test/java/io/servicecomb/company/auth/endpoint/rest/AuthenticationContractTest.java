@@ -49,7 +49,7 @@ public class AuthenticationContractTest {
   @BeforeClass
   public static void startCustomerService() {
     doormanContext = SpringApplication
-        .run(DoormanRestApplication.class, "--server.port=8081", "--spring.profiles.active=dev");
+        .run(DoormanRestApplication.class, "--server.port=8081", "--spring.profiles.active=dev", "--spring.main.web-environment=true");
 
     authenticationService = doormanContext.getBean(AuthenticationService.class);
   }

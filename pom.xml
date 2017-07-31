@@ -51,6 +51,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <pact.version>3.2.13</pact.version>
+    <cse.version>2.1.1</cse.version>
   </properties>
 
   <dependencyManagement>
@@ -304,5 +305,68 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>huaweicloud</id>
+      <!--
+      The dependencies of huawei CSE which provides the commercial features in huawei cloud.
+      Please use this profile if you want to deploy the application into huawei cloud.
+      -->
+      <dependencies>
+        <dependency>
+          <groupId>com.huawei.paas.cse</groupId>
+          <artifactId>foundation-auth</artifactId>
+          <version>${cse.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.huawei.paas.cse</groupId>
+          <artifactId>foundation-config-cc</artifactId>
+          <version>${cse.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.huawei.paas.cse</groupId>
+          <artifactId>cse-handler-tracing</artifactId>
+          <version>${cse.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.huawei.paas.cse</groupId>
+          <artifactId>cse-handler-performance-stats</artifactId>
+          <version>${cse.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.huawei.paas.cse</groupId>
+          <artifactId>cse-handler-cloud-extension</artifactId>
+          <version>${cse.version}</version>
+        </dependency>
+      </dependencies>
+
+      <repositories>
+        <repository>
+          <id>huawei_cloud_cse_dependencies</id>
+          <name>huawei_cloud_cse_dependencies</name>
+          <url>http://cse.servicecomb.io/maven</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>huawei_cloud_cse_dependencies</id>
+          <name>huawei_cloud_cse_dependencies</name>
+          <url>http://cse.servicecomb.io/maven</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
   </profiles>
+    
+
 </project>

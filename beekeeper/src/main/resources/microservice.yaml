@@ -20,7 +20,7 @@ cse:
 servicecomb:
   tracing:
     collector:
-      address: http://zipkin.io:9411/api/v1/spans
+      address: http://zipkin.io:9411
 
   references:
 #  this one below must refer to the microservice name it communicates with

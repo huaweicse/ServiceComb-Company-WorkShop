@@ -20,4 +20,4 @@ cse:
 servicecomb:
   tracing:
     collector:
-      address: http://zipkin.io:9411/api/v1/spans
+      address: http://zipkin.io:9411

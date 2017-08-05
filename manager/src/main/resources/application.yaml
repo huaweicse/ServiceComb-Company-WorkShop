@@ -22,40 +22,15 @@ spring:
 server:
   port: 0
 
-hystrix:
-  execution:
-    isolation:
-      strategy: THREAD
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 5000
-
 ---
 
 spring:
   profiles: sit
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
 
 ---
 
 spring:
   profiles: dev
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 1000
 
 logging:
   level:

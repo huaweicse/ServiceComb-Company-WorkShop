@@ -8,6 +8,13 @@ cse:
   service:
     registry:
       address: http://sc.servicecomb.io:30100
+  isolation:
+    doorman:
+      timeoutInMilliseconds: 30000
+    beekeeper:
+      timeoutInMilliseconds: 30000
+    worker:
+      timeoutInMilliseconds: 30000
   handler:
     chain:
       Provider:

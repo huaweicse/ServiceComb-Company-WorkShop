@@ -16,7 +16,7 @@ understand demo is provided.
 Please read the [blog post](http://servicecomb.io/docs/linuxcon-workshop-demo/) on the detailed explanation of this project.
 
 ## Run Services
-A `docker-compose.yaml` file is provided to start all services an their dependencies as docker containers.
+A `docker-compose.yaml` file is provided to start all services and their dependencies as docker containers.
 1. Build all service images using command `mvn package -Pdocker`
 1. Run all service images using command `docker-compose up`
 

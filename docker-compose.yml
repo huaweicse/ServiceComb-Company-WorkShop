@@ -8,7 +8,7 @@ services:
       - "9411:9411"
   company-bulletin-board:
     image: "servicecomb/service-center"
-    hostname: service.center
+    hostname: service-center
     ports:
       - "30100:30100"
 

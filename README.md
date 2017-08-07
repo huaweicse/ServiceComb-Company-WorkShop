@@ -29,3 +29,34 @@ If you are using [Docker Toolbox](https://www.docker.com/products/docker-toolbox
 ```
 mvn verify -Pdocker -Pdocker-machine
 ```
+
+## Verify services
+You can verify the services using [curl][curl] by the following steps:
+1. Retrieve manager's ip address
+  * If you use docker compose:
+    ```bash
+    export IP="127.0.0.1"
+    ```
+  * If you use docker machine(supposed your docker machine name is `default`):
+    ```
+    export IP=$(docker-machine ip default)
+    ```
+2. Log in and retrieve token from `Authorization` section
+```bash
+curl -v -H "Content-Type: application/x-www-form-urlencoded" -d "username=jordan&password=password" -XPOST "http://$IP:8083/doorman/rest/login"
+```
+Then you can copy the token from the `Authorization` section and use it to replace the `Authorization` header in the following requests.
+3. Get the sixth fibonacci number from the worker service
+```bash
+curl -H "Authorization: replace_with_the_authorization_token" -XGET "http://$IP:8083/worker/fibonacci/term?n=6"
+```
+4. Get the number of drone's ancestors at the 30th generation from the beekeeper service
+```bash
+curl -H "Authorization: replace_with_the_authorization_token" -XGET "http://$IP:8083/beekeeper/rest/drone/ancestors/30"
+```
+5. Get the number of queen's ancestors at the 30th generation from the beekeeper service
+```bash
+curl -H "Authorization: replace_with_the_authorization_token" -XGET "http://$IP:8083/beekeeper/rest/queen/ancestors/30"
+```
+
+[curl]: https://curl.haxx.se

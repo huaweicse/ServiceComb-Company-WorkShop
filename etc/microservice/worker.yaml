@@ -1,0 +1,29 @@
+# all interconnected microservices must belong to an application wth the same ID
+APPLICATION_ID: company
+service_description:
+# name of the declaring microservice
+  name: worker
+  version: 0.0.1
+cse:
+  service:
+    registry:
+      address: https://100.125.1.34:30100
+  highway:
+    address: 0.0.0.0:6001?sslEnable=false
+  rest:
+    address: 0.0.0.0:7001?sslEnable=false
+  monitor:
+    client:
+      serverUri: http://100.125.1.34:30109
+  handler:
+    chain:
+      Provider:
+        default: tracing-provider,sla-provider,bizkeeper-provider,perf-stats
+      Consumer:
+        default: loadbalance,tracing-consumer,sla-consumer,bizkeeper-consumer,perf-stats
+  tracing:
+    enabled: true
+    samplingRate: 0.5
+  config:
+    client:
+      serverUri: https://100.125.1.34:30103

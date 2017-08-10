@@ -365,6 +365,31 @@
           </snapshots>
         </pluginRepository>
       </pluginRepositories>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <version>1.8</version>
+              <executions>
+                <execution>
+                  <phase>compile</phase>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                  <configuration>
+                    <tasks>
+                      <copy file="../etc/microservice/${project.name}.yaml" tofile="${basedir}/target/classes/microservice.yaml" overwrite="true" />
+                      <mkdir dir="${basedir}/target/classes/config" />
+                      <copy file="../etc/log/log4j.${project.name}.properties" tofile="${basedir}/target/classes/config/log4j.${project.name}.properties" />
+                    </tasks>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
     

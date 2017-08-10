@@ -27,7 +27,7 @@ public class JwtTokenStoreTest {
   private final String secretKey = uniquify("SecretKey");
   private final String someUser = uniquify("User");
   private TokenStore tokenStore;
-
+  
   @Test
   public void generatesTokenOfSomeUser() {
     tokenStore = new JwtTokenStore(secretKey, 10);
@@ -38,7 +38,29 @@ public class JwtTokenStoreTest {
     String user = tokenStore.parse(token);
     assertThat(user).isEqualTo(someUser);
   }
+  
+  @Test
+  public void generatesTokenOfSomeUserWithNullKey() {
+    tokenStore = new JwtTokenStore(null, 10);
 
+    String token = tokenStore.generate(someUser);
+    assertThat(token).isNotEmpty();
+
+    String user = tokenStore.parse(token);
+    assertThat(user).isEqualTo(someUser);
+  }
+
+  @Test
+  public void generatesTokenOfSomeUserWithEmptyKey() {
+    tokenStore = new JwtTokenStore("", 10);
+
+    String token = tokenStore.generate(someUser);
+    assertThat(token).isNotEmpty();
+
+    String user = tokenStore.parse(token);
+    assertThat(user).isEqualTo(someUser);
+  }
+  
   @Test
   public void blowsUpWhenTokenExpired() throws InterruptedException {
     tokenStore = new JwtTokenStore(secretKey, 1);

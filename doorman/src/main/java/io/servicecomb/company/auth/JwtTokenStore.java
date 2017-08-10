@@ -27,6 +27,7 @@ import java.util.Date;
  */
 class JwtTokenStore implements TokenStore {
 
+  private final static String DEFAULT_SECRETKEY = "someSecretKey";
   private final String secretKey;
   private final int secondsToExpire;
 
@@ -36,7 +37,11 @@ class JwtTokenStore implements TokenStore {
    * @param secondsToExpire the expire time in seconds.
    */
   JwtTokenStore(String secretKey, int secondsToExpire) {
-    this.secretKey = secretKey;
+    if (null == secretKey || secretKey.isEmpty()) {
+      this.secretKey = DEFAULT_SECRETKEY;
+    } else {
+      this.secretKey = secretKey;
+    }
     this.secondsToExpire = secondsToExpire;
   }
 

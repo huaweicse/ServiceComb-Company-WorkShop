@@ -19,7 +19,7 @@ MANAGER_NAME=manager                                                    # ------
 
 which docker
 if [ $? -ne 0 ]; then
-    echo "no docker, please install docker."
+    echo "no docker, please install docker 1.11.2."
     exit 1
 fi
 
@@ -42,10 +42,6 @@ for property in ${properties[@]}; do
     isPropertySet $property ${!property}
 done
 
-CUR_PATH=$(cd "$(dirname "$0")"; pwd)
-ROOT_PATH="${CUR_PATH}/../"
-cd "${ROOT_PATH}"
-
 modules=($WORKER_NAME $BEEKEEPER_NAME $DOORMAN_NAME $MANAGER_NAME)
 echo "Removing old docker images"
 for module in ${modules[@]}; do
@@ -56,6 +52,9 @@ for module in ${modules[@]}; do
 done
 
 echo "Generating new docker images"
+CUR_PATH=$(cd "$(dirname "$0")"; pwd)
+ROOT_PATH="${CUR_PATH}/../"
+cd "${ROOT_PATH}"
 mvn clean package -DskipTests -DskipITs -Phuaweicloud -Pdocker
 
 echo "Tagging image versions"
@@ -63,11 +62,18 @@ for module in ${modules[@]}; do
     docker tag $module:$ORIGIN_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
 done
 
+zipkin_exists=$(docker images| grep "${REPO_ADDRESS}/${TENANT_NAME}/zipkin"| awk '{print $2}'| grep 1)
+if [ -z $zipkin_exists ]; then
+    docker pull openzipkin/zipkin:1
+    docker tag openzipkin/zipkin:1 ${REPO_ADDRESS}/${TENANT_NAME}/zipkin:1
+fi
+
 docker login -u ${USER_NAME} -p ${PW} ${REPO_ADDRESS}
 
 echo "Pushing images to huawei docker repository"
 for module in ${modules[@]}; do
     docker push ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
 done
+docker push ${REPO_ADDRESS}/${TENANT_NAME}/zipkin:1
 
 echo "Done"

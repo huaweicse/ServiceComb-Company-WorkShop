@@ -19,13 +19,16 @@ cse:
         default: tracing-provider,sla-provider,bizkeeper-provider,perf-stats
       Consumer:
         default: loadbalance,tracing-consumer,sla-consumer,bizkeeper-consumer,perf-stats
-  references:
-  #  this one below must refer to the microservice name it communicates with
-    worker:
-      version-rule: 0.0.1
-  tracing:
-    enabled: true
-    samplingRate: 0.5
   config:
     client:
       serverUri: https://100.125.1.34:30103
+
+servicecomb:
+  tracing:
+    collector:
+      address: http://zipkin:30411
+
+  references:
+#  this one below must refer to the microservice name it communicates with
+    worker:
+      version-rule: 0.0.1

@@ -33,7 +33,7 @@ class AuthenticationConfig {
   }
 
   @Bean
-  TokenStore tokenStore(@Value("${company.auth.secret}") String secretKey) {
+  TokenStore tokenStore(@Value("${company.auth.secret:someSecretKey}") String secretKey) {
     return new JwtTokenStore(secretKey, SECONDS_OF_A_DAY);
   }
 }

@@ -10,7 +10,7 @@
 # TENANT_NAME=xxxxxxxxxxx                                               # ---------huawei cloud tenant name.
 # REPO_ADDRESS=registry.cn-north-1.hwclouds.com                         # ---------huawei cloud images repository address.
 # USER_NAME=xxxxx                                                       # ---------username: login huawei cloud images repository.
-# PW=xxxxxxx                                                            # ---------paasword: login huawei cloud images repository.
+# PW=xxxxxxx                                                            # ---------password: login huawei cloud images repository.
 WORKER_NAME=worker                                                      # ---------worker name, created by maven docker plugin.
 BEEKEEPER_NAME=beekeeper                                                # ---------beekeeper name, created by maven docker plugin.
 DOORMAN_NAME=doorman                                                    # ---------doorman name, created by maven docker plugin.

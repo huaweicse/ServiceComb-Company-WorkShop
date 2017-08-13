@@ -31,7 +31,6 @@ services:
       - "company-bulletin-board:sc.servicecomb.io"
       - "zipkin:zipkin.io"
     environment:
-      - JAVA_OPTS=-Dcompany.auth.secret=someSecretKey
       - ARTIFACT_ID=doorman
     ports:
       - "8081:8080"

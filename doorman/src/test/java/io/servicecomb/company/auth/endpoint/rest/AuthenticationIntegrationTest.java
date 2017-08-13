@@ -45,7 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = {"company.auth.secret=someSecretKey"}, classes = DoormanApplication.class)
+@SpringBootTest(classes = DoormanApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 public class AuthenticationIntegrationTest {
@@ -56,7 +56,7 @@ public class AuthenticationIntegrationTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @Value("${company.auth.secret}")
+  @Value("${company.auth.secret:someSecretKey}")
   private String secretKey;
 
   private final ObjectMapper objectMapper = new ObjectMapper();

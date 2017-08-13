@@ -6,7 +6,6 @@
 
 # config example
 # TARGET_VERSION=0.0.1                                                  # ---------huawei cloud images repository target version.
-# ORIGIN_VERSION=0.0.1-SNAPSHOT                                         # ---------local images version.
 # TENANT_NAME=xxxxxxxxxxx                                               # ---------huawei cloud tenant name.
 # REPO_ADDRESS=registry.cn-north-1.hwclouds.com                         # ---------huawei cloud images repository address.
 # USER_NAME=xxxxx                                                       # ---------username: login huawei cloud images repository.
@@ -36,11 +35,15 @@ function isPropertySet () {
     fi
 }
 
-properties=(TARGET_VERSION ORIGIN_VERSION TENANT_NAME REPO_ADDRESS USER_NAME PW
+properties=(TARGET_VERSION TENANT_NAME REPO_ADDRESS USER_NAME PW
             WORKER_NAME BEEKEEPER_NAME DOORMAN_NAME MANAGER_NAME)
 for property in ${properties[@]}; do
     isPropertySet $property ${!property}
 done
+
+ROOT_PATH=$(cd "$(dirname $0)/.."; pwd)
+cd $ROOT_PATH
+ORIGIN_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep Building | awk '{print $4}')
 
 modules=($WORKER_NAME $BEEKEEPER_NAME $DOORMAN_NAME $MANAGER_NAME)
 echo "Removing old docker images"
@@ -52,9 +55,6 @@ for module in ${modules[@]}; do
 done
 
 echo "Generating new docker images"
-CUR_PATH=$(cd "$(dirname "$0")"; pwd)
-ROOT_PATH="${CUR_PATH}/../"
-cd "${ROOT_PATH}"
 mvn clean package -DskipTests -DskipITs -Phuaweicloud -Pdocker
 
 echo "Tagging image versions"

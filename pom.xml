@@ -165,6 +165,11 @@
           </exclusion>
         </exclusions>
       </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-web</artifactId>
+        <version>2.8.2</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -316,6 +321,12 @@
           <groupId>com.huawei.paas.cse</groupId>
           <artifactId>foundation-auth</artifactId>
           <version>${cse.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-log4j12</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
           <groupId>com.huawei.paas.cse</groupId>
@@ -379,9 +390,9 @@
                   </goals>
                   <configuration>
                     <tasks>
-                      <copy file="../etc/microservice/${project.name}.yaml" tofile="${basedir}/target/classes/microservice.yaml" overwrite="true" />
-                      <mkdir dir="${basedir}/target/classes/config" />
-                      <copy file="../etc/log/log4j.${project.name}.properties" tofile="${basedir}/target/classes/config/log4j.${project.name}.properties" />
+                      <copy file="../etc/microservice/${project.name}.yaml" tofile="${basedir}/target/classes/microservice.yaml" overwrite="true"/>
+                      <copy file="../etc/log/log4j2.xml" tofile="${basedir}/target/classes/log4j2.xml" overwrite="true"/>
+                      <replace file="${basedir}/target/classes/log4j2.xml" token="@project_name@" value="${project.name}"/>
                     </tasks>
                   </configuration>
                 </execution>

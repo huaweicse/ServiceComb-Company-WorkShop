@@ -34,7 +34,7 @@ You will need:
 ## Run Services
 A `docker-compose.yaml` file is provided to start all services and their dependencies as docker containers.
 1. Build all service images using command `mvn package -Pdocker`
-1. Run all service images using command `docker-compose up`
+2. Run all service images using command `docker-compose up`
 
 If you are using [Docker Toolbox](https://www.docker.com/products/docker-toolbox), please add an extra profile `-Pdocker-machine`.
 
@@ -60,8 +60,8 @@ You can verify the services using curl by the following steps:
 2. Log in and retrieve token from `Authorization` section
     ```bash
     curl -v -H "Content-Type: application/x-www-form-urlencoded" -d "username=jordan&password=password" -XPOST "http://$HOST/doorman/rest/login"
-    ```
-    Then you can copy the token from the `Authorization` section and use it to replace the `Authorization` header in the following requests.  
+    ```  
+    Then you can copy the token from the `Authorization` section and use it to replace the `Authorization` header in the following requests.
 3. Get the sixth fibonacci number from the worker service
     ```bash
     curl -H "Authorization: replace_with_the_authorization_token" -XGET "http://$HOST/worker/fibonacci/term?n=6"
@@ -83,6 +83,17 @@ To auto compile, build, deploy and run this workshop demo on Huawei Cloud's [Ser
 3. Auto deploy using Huawei Cloud's orchestration feature, details can refer to [orchestration guide][orchestration_guide]. 
 
 [huawei_cloud]: http://www.hwclouds.com
-[service_stage]: https://servicestage.hwclouds.com/servicestage
 [publish_guide]: docs/how-to-auto-publish-images-to-huawei-cloud.md
 [orchestration_guide]: docs/how-to-auto-deploy-on-huawei-cloud.md
+
+## 在华为云上自动部署
+
+本章节介绍基于华为微服务云应用平台[Service Stage ][service_stage]，实现自动编译、构建、部署和运行的步骤。
+
+1. 一个已注册的[Service Stage][service_stage]帐号。
+2. 自动编译、构建和发布Docker镜像到华为的镜像仓库，详情可见[自动发布指南][publish_guide_cn] 。
+3. 使用华为云的编排功能自动部署微服务，详情可见[自动部署指南][orchestration_guide_cn] 。
+
+[service_stage]: https://servicestage.hwclouds.com/servicestage
+[publish_guide_cn]: docs/how-to-auto-publish-images-to-huawei-cloud-cn.md
+[orchestration_guide_cn]: docs/how-to-auto-deploy-on-huawei-cloud-cn.md

@@ -110,7 +110,7 @@
       </build>
     </profile>
     <profile>
-      <id>huaweicloud</id>
+      <id>HuaweiCloud</id>
       <build>
         <plugins>
           <plugin>

@@ -55,7 +55,7 @@ for module in ${modules[@]}; do
 done
 
 echo "Generating new docker images"
-mvn clean package -DskipTests -DskipITs -Phuaweicloud -Pdocker
+mvn clean package -DskipTests -DskipITs -PHuaweiCloud -Pdocker
 
 echo "Tagging image versions"
 for module in ${modules[@]}; do

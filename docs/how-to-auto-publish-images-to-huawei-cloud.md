@@ -17,11 +17,10 @@ Before you use the script, there are several variables you need to set up first.
 
 | Name            | Description                                         |
 |-----------------|-----------------------------------------------------|
-| TARGET\_VERSION | image version publish in the Huawei Image Warehouse |
 | TENANT\_NAME    | tenant name shown in fig.1                          |
 | REPO\_ADDRESS   | the image repository address shown in fig.1         |
-| USER\_NAME      | username shown in fig.1                             |
-| PW              | password shown in fig.1                             |
+| USERNAME        | username shown in fig.1                             |
+| PASSWORD        | password shown in fig.1                             |
 
 The following figure(fig.1) can be retrieved by visiting [Huawei Image Warehouse][image_warehouse], and then click the *Pull/Push Guide* -> *generate docker login instruction*.
 

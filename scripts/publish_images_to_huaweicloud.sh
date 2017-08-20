@@ -9,14 +9,16 @@
 # USERNAME=xxxxx                                                        # ---------username: login huawei cloud images repository.
 # PASSWORD=xxxxxxx                                                      # ---------password: login huawei cloud images repository.
 
+THIRD_PARTY_IMAGES=(openzipkin/zipkin:1)
 
-which docker
+
+which docker > /dev/null
 if [ $? -ne 0 ]; then
     echo "no docker, please install docker 1.11.2."
     exit 1
 fi
 
-which mvn
+which mvn > /dev/null
 if [ $? -ne 0 ]; then
     echo "no maven, please install maven."
     exit 1
@@ -46,19 +48,20 @@ function autoInferModules () {
 }
 
 function incrementVersion () {
-    local version=$1
-    IFS=. read major minor patch <<< "${version##*-}"
-    if [ $patch -eq 99 ]; then
-        patch=0
-        minor=$((minor + 1))
+    if [ ${PREV_PROJECT_VERSION} != ${PROJECT_VERSION} ]; then
+        BUILD_VERSION=0
+    fi
+    if [ -z "${PROJECT_VERSION##*SNAPSHOT*}" ]; then
+        BUILD_VERSION=$(printf "%03d" $((10#${BUILD_VERSION} + 1)))
+        TARGET_VERSION=$(printf "${PROJECT_VERSION}-build-%s" ${BUILD_VERSION})
     else
-        patch=$((patch + 1))
+        if [ ${PREV_PROJECT_VERSION} == ${PROJECT_VERSION} ]; then
+            echo "You have published version ${PROJECT_VERSION} before. Please update your pom version."
+            exit 1
+        fi
+        TARGET_VERSION=${PROJECT_VERSION}
+        BUILD_VERSION=0
     fi
-    if [ $minor -eq 100 ]; then
-        minor=0
-        major=$((major + 1))
-    fi
-    echo "$major.$minor.$patch"
 }
 
 properties=(TENANT_NAME REPO_ADDRESS USERNAME PASSWORD)
@@ -66,21 +69,23 @@ for property in ${properties[@]}; do
     isPropertySet $property ${!property}
 done
 
-OLD_VERSION=0.0.0 
-TARGET_VERSION=$(incrementVersion $OLD_VERSION) # target version in huawei cloud images repository
-
 ROOT_PATH=$(cd "$(dirname $0)/.."; pwd)
 cd $ROOT_PATH
-BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep Building | awk '{print $4}')
+PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep Building | awk '{print $4}')
+
+PREV_PROJECT_VERSION=0.0.0
+BUILD_VERSION=0
+TARGET_VERSION=
+incrementVersion
 
 declare -a modules
 autoInferModules $ROOT_PATH
 
 echo "Removing old docker images"
 for module in ${modules[@]}; do
-    image_id=$(docker images| grep $module| grep $BUILD_VERSION| awk '{print $3}')
+    image_id=$(docker images| grep $module| grep $PROJECT_VERSION| awk '{print $3}'| uniq)
     if [ ! -z $image_id ]; then
-       docker rmi -f $image_id
+       echo ${image_id} | xargs docker rmi -f
     fi
 done
 
@@ -89,14 +94,24 @@ mvn clean package -DskipTests -DskipITs -PHuaweiCloud -Pdocker
 
 echo "Tagging image versions"
 for module in ${modules[@]}; do
-    docker tag $module:$BUILD_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
+    docker tag $module:$PROJECT_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
 done
 
-zipkin_exists=$(docker images| grep "${REPO_ADDRESS}/${TENANT_NAME}/zipkin"| awk '{print $2}'| grep 1)
-if [ -z $zipkin_exists ]; then
-    docker pull openzipkin/zipkin:1
-    docker tag openzipkin/zipkin:1 ${REPO_ADDRESS}/${TENANT_NAME}/zipkin:1
-fi
+VALID_THIRD_PARTY_IMAGES=()
+for image in ${THIRD_PARTY_IMAGES[@]}; do
+    IFS=: read imageName imageVersion <<< $image
+    if [ -z ${imageVersion} ]; then
+        imageVersion="latest"
+    fi
+    validImageName=$(cut -d "/" -f2 <<< ${imageName})
+    VALID_IMAGE=${REPO_ADDRESS}/${TENANT_NAME}/${validImageName}
+    image_exists=$(docker images| grep ${VALID_IMAGE}| awk '{print $2}'| grep ${imageVersion})
+    if [ -z ${image_exists} ]; then
+        docker pull ${imageName}:${imageVersion}
+        docker tag ${imageName}:${imageVersion} ${VALID_IMAGE}:${imageVersion}
+    fi
+    VALID_THIRD_PARTY_IMAGES+=("${VALID_IMAGE}:${imageVersion}")
+done
 
 docker login -u ${USERNAME} -p ${PASSWORD} ${REPO_ADDRESS}
 
@@ -104,10 +119,13 @@ echo "Pushing images to huawei docker repository"
 for module in ${modules[@]}; do
     docker push ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
 done
-docker push ${REPO_ADDRESS}/${TENANT_NAME}/zipkin:1
+for validImage in ${VALID_THIRD_PARTY_IMAGES}; do
+    docker push ${validImage}
+done
 
 # update version in script
 SCRIPT_PATH=$ROOT_PATH/scripts/$(basename $0)
-sed -i "s|$OLD_VERSION|$TARGET_VERSION|g" $SCRIPT_PATH
+sed -i "s|$PREV_PROJECT_VERSION|$PROJECT_VERSION|g" $SCRIPT_PATH
+sed -i "s/^BUILD_VERSION=[[:digit:]]\+/BUILD_VERSION=$BUILD_VERSION/g" $SCRIPT_PATH
 
 echo "Done"

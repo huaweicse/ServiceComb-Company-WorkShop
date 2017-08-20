@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: company-worker
+  name: company-worker
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: company-worker
+    spec:
+      containers:
+      - env:
+        - name: ARTIFACT_ID
+          value: worker
+        - name: JAVA_OPTS
+          value: -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411
+        image: ericlee/worker:0.0.1-SNAPSHOT
+        name: company-worker
+        ports:
+        - containerPort: 7070
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+status: {}

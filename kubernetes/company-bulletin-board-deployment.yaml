@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: company-bulletin-board
+  name: company-bulletin-board
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: company-bulletin-board
+    spec:
+      containers:
+      - image: servicecomb/service-center
+        name: company-bulletin-board
+        ports:
+        - containerPort: 30100
+        resources: {}
+      restartPolicy: Always
+status: {}

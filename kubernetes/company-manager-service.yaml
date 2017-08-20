@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: company-manager
+  name: company-manager
+spec:
+  ports:
+  - name: "8083"
+    port: 8083
+    targetPort: 8080
+    nodePort: 30301
+    protocol: TCP
+  type: NodePort
+  selector:
+    io.kompose.service: company-manager
+status:
+  loadBalancer: {}

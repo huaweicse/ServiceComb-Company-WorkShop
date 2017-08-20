@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: company-manager
+  name: company-manager
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: company-manager
+    spec:
+      containers:
+      - env:
+        - name: ARTIFACT_ID
+          value: manager
+        - name: JAVA_OPTS
+          value: -Dserver.port=8080 -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411
+        image: ericlee/manager:0.0.1-SNAPSHOT
+        name: company-manager
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+status: {}

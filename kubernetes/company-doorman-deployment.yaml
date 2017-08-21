@@ -34,7 +34,7 @@ spec:
           value: doorman
         - name: JAVA_OPTS
           value: -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411
-        image: ericlee/doorman:0.0.1-SNAPSHOT
+        image: servicecomb/doorman:0.0.1-SNAPSHOT
         name: company-doorman
         ports:
         - containerPort: 8080

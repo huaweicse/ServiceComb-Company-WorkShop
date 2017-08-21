@@ -51,6 +51,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <pact.version>3.2.13</pact.version>
+    <java-chassis.version>0.2.0</java-chassis.version>
     <cse.version>2.1.1</cse.version>
   </properties>
 
@@ -66,7 +67,7 @@
       <dependency>
         <groupId>io.servicecomb</groupId>
         <artifactId>java-chassis-dependencies</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>${java-chassis.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -403,5 +404,5 @@
       </build>
     </profile>
   </profiles>
-    
+
 </project>

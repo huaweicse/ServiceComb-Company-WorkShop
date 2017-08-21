@@ -86,6 +86,10 @@ To auto compile, build, deploy and run this workshop demo on Huawei Cloud's [Ser
 [publish_guide]: docs/how-to-auto-publish-images-to-huawei-cloud.md
 [orchestration_guide]: docs/how-to-auto-deploy-on-huawei-cloud.md
 
+## Auto deploy on kubernetes cluster      
+To auto pull images from servicecomb in docker hub, run on kubernetes cluster whether on gce or bare-metal.      
+Reference to [Run Company on Kubernetes Cluster](kubernetes/READEME.md)
+
 ## 在华为云上自动部署
 
 本章节介绍基于华为微服务云应用平台[Service Stage ][service_stage]，实现自动编译、构建、部署和运行的步骤。

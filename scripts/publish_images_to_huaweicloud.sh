@@ -1,15 +1,16 @@
 #!/bin/bash
 # huawei service stage website :  https://servicestage.hwclouds.com/
 # How to use(Linux):
-# 1. Uncomment the variables and set their values
+# 1. Uncomment the variables and set their values, details can refer to https://github.com/ServiceComb/ServiceComb-Company-WorkShop/blob/master/docs/how-to-auto-publish-images-to-huawei-cloud.md
 # 2. Execute: bash publish_images_to_huaweicloud.sh
 
 # TENANT_NAME=xxxxxxxxxxx                                               # ---------huawei cloud tenant name.
 # REPO_ADDRESS=registry.cn-north-1.hwclouds.com                         # ---------huawei cloud images repository address.
-# USERNAME=xxxxx                                                        # ---------username: login huawei cloud images repository.
-# PASSWORD=xxxxxxx                                                      # ---------password: login huawei cloud images repository.
+# USERNAME=xxxxx                                                        # ---------username to login huawei cloud images repository.
+# PASSWORD=xxxxxxx                                                      # ---------password to login huawei cloud images repository.
 
-THIRD_PARTY_IMAGES=(openzipkin/zipkin:1)
+# PROJECT_PATH=                                                         # ---------(optional) path to maven project.
+THIRD_PARTY_IMAGES=(openzipkin/zipkin:1)				# ---------(optional) third party images that published on Docker Hub.
 
 
 which docker > /dev/null
@@ -69,8 +70,18 @@ for property in ${properties[@]}; do
     isPropertySet $property ${!property}
 done
 
-ROOT_PATH=$(cd "$(dirname $0)/.."; pwd)
-cd $ROOT_PATH
+
+if [ -z ${PROJECT_PATH} ]; then
+    # set default project path to parent directory of the script's path
+    PROJECT_PATH=$(cd "$dirname $0)/.."; pwd)
+else
+    PROJECT_PATH=$(cd ${PROJECT_PATH}; pwd)
+fi
+if [ ! -e "${PROJECT_PATH}/pom.xml" ]; then
+    echo "Project path is invalid. Please specify a maven project path."
+    exit 1
+fi
+cd ${PROJECT_PATH}
 PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep Building | awk '{print $4}')
 
 PREV_PROJECT_VERSION=0.0.0
@@ -79,7 +90,7 @@ TARGET_VERSION=
 incrementVersion
 
 declare -a modules
-autoInferModules $ROOT_PATH
+autoInferModules ${PROJECT_PATH}
 
 echo "Removing old docker images"
 for module in ${modules[@]}; do
@@ -94,7 +105,7 @@ mvn clean package -DskipTests -DskipITs -PHuaweiCloud -Pdocker
 
 echo "Tagging image versions"
 for module in ${modules[@]}; do
-    docker tag $module:$PROJECT_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
+    docker tag $module:$PROJECT_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/$module:$TARGET_VERSION
 done
 
 VALID_THIRD_PARTY_IMAGES=()
@@ -117,14 +128,14 @@ docker login -u ${USERNAME} -p ${PASSWORD} ${REPO_ADDRESS}
 
 echo "Pushing images to huawei docker repository"
 for module in ${modules[@]}; do
-    docker push ${REPO_ADDRESS}/${TENANT_NAME}/workshop-$module:$TARGET_VERSION
+    docker push ${REPO_ADDRESS}/${TENANT_NAME}/$module:$TARGET_VERSION
 done
 for validImage in ${VALID_THIRD_PARTY_IMAGES}; do
     docker push ${validImage}
 done
 
 # update version in script
-SCRIPT_PATH=$ROOT_PATH/scripts/$(basename $0)
+SCRIPT_PATH=$(cd "$(dirname $0)"; pwd)
 sed -i "s|$PREV_PROJECT_VERSION|$PROJECT_VERSION|g" $SCRIPT_PATH
 sed -i "s/^BUILD_VERSION=[[:digit:]]\+/BUILD_VERSION=$BUILD_VERSION/g" $SCRIPT_PATH
 

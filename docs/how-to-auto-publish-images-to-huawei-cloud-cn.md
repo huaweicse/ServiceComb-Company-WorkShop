@@ -21,6 +21,8 @@
 | REPO\_ADDRESS   | 在图1中的镜像仓库地址      |
 | USERNAME      | 在图1中的用户名         |
 | PASSWORD        | 在图1中的密码          |
+| PROJECT\_PATH    | (可选) maven项目路径，默认为脚本执行路径的父目录 |
+| THIRD\_PARTY\_IMAGES | (可选) 可在[Docker Hub][docker_hub]上访问的第三方镜像，以空格分隔 |
 
 图1可以通过以下步骤来获取：
 
@@ -45,3 +47,4 @@
 [maven]: https://maven.apache.org/install.html
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [image_warehouse]: https://servicestage.hwclouds.com/servicestage/#/stage/softRepository/mirrorCenter/myMirrorPack
+[docker_hub]: https://hub.docker.com

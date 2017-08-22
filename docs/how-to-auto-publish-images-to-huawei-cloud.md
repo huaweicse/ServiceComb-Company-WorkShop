@@ -21,6 +21,8 @@ Before you use the script, there are several variables you need to set up first.
 | REPO\_ADDRESS   | the image repository address shown in fig.1         |
 | USERNAME        | username shown in fig.1                             |
 | PASSWORD        | password shown in fig.1                             |
+| PROJECT\_PATH    | (Optional) maven project path, default to script's parent path |
+| THIRD\_PARTY\_IMAGES | (Optional) third party images that published on [Docker Hub][docker_hub], separated by space |
 
 The following figure(fig.1) can be retrieved by visiting [Huawei Image Warehouse][image_warehouse], and then click the *Pull/Push Guide* -> *generate docker login instruction*.
 
@@ -37,3 +39,4 @@ The following figure(fig.1) can be retrieved by visiting [Huawei Image Warehouse
 [maven]: https://maven.apache.org/install.html
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [image_warehouse]: https://servicestage.hwclouds.com/servicestage/#/stage/softRepository/mirrorCenter/myMirrorPack
+[docker_hub]: https://hub.docker.com

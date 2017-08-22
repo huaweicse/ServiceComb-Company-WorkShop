@@ -88,7 +88,7 @@ To auto compile, build, deploy and run this workshop demo on Huawei Cloud's [Ser
 
 ## Auto deploy on kubernetes cluster      
 To auto pull images from servicecomb in docker hub, run on kubernetes cluster whether on gce or bare-metal.      
-Reference to [Run Company on Kubernetes Cluster](kubernetes/READEME.md)
+Reference to [Run Company on Kubernetes Cluster](kubernetes/README.md)
 
 ## 在华为云上自动部署
 

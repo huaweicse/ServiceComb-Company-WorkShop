@@ -13,9 +13,9 @@
 THIRD_PARTY_IMAGES=(openzipkin/zipkin:1)				# ---------(optional) third party images that published on Docker Hub.
 
 
-which docker > /dev/null
+docker version | grep "1.11.2" > /dev/null
 if [ $? -ne 0 ]; then
-    echo "no docker, please install docker 1.11.2."
+    echo "Please install docker 1.11.2 first."
     exit 1
 fi
 
@@ -48,6 +48,17 @@ function autoInferModules () {
     done
 }
 
+
+function loadPreviousBuildInfo () {
+    if [ ! -e $LOGFILE ]; then
+        PREV_PROJECT_VERSION=0.0.0
+        BUILD_VERSION=0
+    else
+        local prevTargetVersion=$(cat $LOGFILE)
+        IFS=, read PREV_PROJECT_VERSION BUILD_VERSION <<< $prevTargetVersion
+    fi
+}
+
 function incrementVersion () {
     if [ ${PREV_PROJECT_VERSION} != ${PROJECT_VERSION} ]; then
         BUILD_VERSION=0
@@ -73,12 +84,12 @@ done
 
 if [ -z ${PROJECT_PATH} ]; then
     # set default project path to parent directory of the script's path
-    PROJECT_PATH=$(cd "$dirname $0)/.."; pwd)
+    PROJECT_PATH=$(cd $(dirname $0)/..; pwd)
 else
     PROJECT_PATH=$(cd ${PROJECT_PATH}; pwd)
 fi
 if [ ! -e "${PROJECT_PATH}/pom.xml" ]; then
-    echo "Project path is invalid. Please specify a maven project path."
+    echo "Project in ${PROJECT_PATH} is not a maven project. Please specify PROJECT_PATH to the path of your maven project."
     exit 1
 fi
 cd ${PROJECT_PATH}
@@ -87,6 +98,8 @@ PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep Building
 PREV_PROJECT_VERSION=0.0.0
 BUILD_VERSION=0
 TARGET_VERSION=
+LOGFILE="${PROJECT_PATH}/previous-build.log"
+loadPreviousBuildInfo 
 incrementVersion
 
 declare -a modules
@@ -134,9 +147,6 @@ for validImage in ${VALID_THIRD_PARTY_IMAGES}; do
     docker push ${validImage}
 done
 
-# update version in script
-SCRIPT_PATH=$(cd "$(dirname $0)"; pwd)
-sed -i "s|$PREV_PROJECT_VERSION|$PROJECT_VERSION|g" $SCRIPT_PATH
-sed -i "s/^BUILD_VERSION=[[:digit:]]\+/BUILD_VERSION=$BUILD_VERSION/g" $SCRIPT_PATH
+echo "${PROJECT_VERSION},${BUILD_VERSION}" > $LOGFILE
 
 echo "Done"

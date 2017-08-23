@@ -33,6 +33,8 @@ spec:
         name: company-bulletin-board
         ports:
         - containerPort: 30100
-        resources: {}
+        resources:
+          requests:
+            cpu: 200m
       restartPolicy: Always
 status: {}

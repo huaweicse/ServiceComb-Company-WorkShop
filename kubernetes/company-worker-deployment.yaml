@@ -39,6 +39,8 @@ spec:
         ports:
         - containerPort: 7070
         - containerPort: 8080
-        resources: {}
+        resources:
+          requests:
+            cpu: 200m
       restartPolicy: Always
 status: {}

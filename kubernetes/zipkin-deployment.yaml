@@ -33,6 +33,8 @@ spec:
         name: zipkin
         ports:
         - containerPort: 9411
-        resources: {}
+        resources:
+          requests:
+            cpu: 200m
       restartPolicy: Always
 status: {}

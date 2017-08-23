@@ -38,6 +38,8 @@ spec:
         name: company-beekeeper
         ports:
         - containerPort: 8090
-        resources: {}
+        resources:
+          requests:
+            cpu: 200m
       restartPolicy: Always
 status: {}

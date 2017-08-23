@@ -38,6 +38,8 @@ spec:
         name: company-manager
         ports:
         - containerPort: 8080
-        resources: {}
+        resources:
+          requests:
+            cpu: 200m
       restartPolicy: Always
 status: {}

@@ -18,9 +18,11 @@ package io.servicecomb.company.manager.archive;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableCaching
+@Profile("archive")
 class ProjectArchiveConfig {
   @Bean
   ProjectArchive<String, String> projectArchive() {

@@ -20,12 +20,14 @@ import static io.servicecomb.company.manager.filters.FilterConstants.FIBONACCI_P
 import com.netflix.zuul.ZuulFilter;
 import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
  * Post {@link ZuulFilter} to update cache entry when a fibonacci term is calculated.
  */
 @Component
+@Profile("archive")
 class WorkerCacheUpdateFilter extends CacheUpdateFilter {
 
   @Autowired

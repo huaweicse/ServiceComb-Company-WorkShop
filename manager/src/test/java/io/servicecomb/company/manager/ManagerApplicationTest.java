@@ -67,7 +67,7 @@ import org.springframework.util.MultiValueMap;
         "zuul.routes.worker.url=http://localhost:8082"
     }
 )
-@ActiveProfiles("dev")
+@ActiveProfiles("dev,archive")
 public class ManagerApplicationTest {
 
   @ClassRule

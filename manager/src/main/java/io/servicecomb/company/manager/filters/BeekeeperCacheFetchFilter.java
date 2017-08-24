@@ -21,9 +21,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("archive")
 class BeekeeperCacheFetchFilter extends CacheFetchFilter {
 
   @Autowired

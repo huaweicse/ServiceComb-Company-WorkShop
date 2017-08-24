@@ -20,9 +20,11 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("archive")
 class WorkerCacheFetchFilter extends CacheFetchFilter {
 
   @Autowired

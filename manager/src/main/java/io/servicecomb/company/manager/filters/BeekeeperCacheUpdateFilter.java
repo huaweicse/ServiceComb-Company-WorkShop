@@ -20,9 +20,11 @@ import static io.servicecomb.company.manager.filters.FilterConstants.ANCESTORS_P
 
 import io.servicecomb.company.manager.archive.ProjectArchive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("archive")
 class BeekeeperCacheUpdateFilter extends CacheUpdateFilter {
 
   @Autowired

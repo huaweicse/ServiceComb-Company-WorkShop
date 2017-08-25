@@ -33,7 +33,7 @@ Repeat step (1) and step (2) for the *doorman\_image*, *beekeeper\_image*, *work
 3. Deploy. As shown in fig.6, save the template and then click deploy. After that, enter the stack name and click *Create* button.  
 ![fig.6 save and deploy](images/save_and_deploy.png)  
 fig.6 save and deploy  
-4. Check the stack status by visiting the [Stack](https://servicestage.hwclouds.com/servicestage/#/stage/stack/stacklist) page. When your cluster turns green, it means that it's ready and you can click your cluster. After that, click as fig.7 shown, then get the host address from fig.8. Then you can **verify services** with that hosts and replace port with 30411 to visit the zipkin service.
+4. Check the stack status by visiting the [Stack](https://servicestage.hwclouds.com/servicestage/#/stage/stack/stacklist) page. When your cluster turns green, it means that it's ready and you can click your cluster. After that, click as fig.7 shown, then get the host address from fig.8. Then you can [verify services](https://github.com/ServiceComb/ServiceComb-Company-WorkShop#verify-services) with that hosts and replace port with 30411 to visit the zipkin service.
 ![fig.7 view manager details](images/view_manager_details.png)  
 fig.7 view manager details  
 ![fig.8 get host address](images/get_host_address.png)  

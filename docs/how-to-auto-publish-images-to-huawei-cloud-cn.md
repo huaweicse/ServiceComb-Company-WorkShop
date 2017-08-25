@@ -43,7 +43,7 @@
   ```
   稍等片刻直至屏幕输出*Done*的信息，然后就可以在 [华为镜像仓库][image_warehouse] 中看到刚才上传的镜像了。
 
-[docker_install_guide]: how-to-install-docker_cn.md
+[docker_install_guide]: how-to-install-docker-cn.md
 [maven]: https://maven.apache.org/install.html
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [image_warehouse]: https://servicestage.hwclouds.com/servicestage/#/stage/softRepository/mirrorCenter/myMirrorPack

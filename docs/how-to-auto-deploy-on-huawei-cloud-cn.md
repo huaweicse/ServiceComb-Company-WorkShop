@@ -32,7 +32,7 @@
 3. 部署。如图6所示，点击*保存模板*和*部署*按钮。然后点击*创建*按钮。  
   ![图6 保存并部署](images/save_and_deploy_cn.png)  
   图6 保存并部署  
-4. 访问 [堆栈](https://servicestage.hwclouds.com/servicestage/#/stage/stack/stacklist) 界面，检查堆栈运行状态。当集群颜色由蓝色变为绿色时，就说明集群已成功部署。然后就按图7所示进入经理服务详情页面，获取图8所示位置的服务地址，并通过项目首页中的**验证服务**一栏提供的方式去验证服务是否正常，同时也可以访问调用链跟踪服务，其运行于30411端口。
+4. 访问 [堆栈](https://servicestage.hwclouds.com/servicestage/#/stage/stack/stacklist) 界面，检查堆栈运行状态。当集群颜色由蓝色变为绿色时，就说明集群已成功部署。然后就按图7所示进入经理服务详情页面，获取图8所示位置的服务地址，并通过项目首页中的[验证服务](https://github.com/ServiceComb/ServiceComb-Company-WorkShop#verify-services)一栏提供的方式去验证服务是否正常，同时也可以访问调用链跟踪服务，其运行于30411端口。
   ![图7 查看经理服务详情](images/view_manager_details_cn.png)  
   图7 查看经理服务详情  
   ![图8 获取服务地址](images/get_host_address_cn.png)  

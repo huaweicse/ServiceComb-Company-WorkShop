@@ -33,4 +33,4 @@ kubectl autoscale deployment company-bulletin-board --cpu-percent=50 --min=1 --m
 kubectl autoscale deployment company-worker --cpu-percent=50 --min=1 --max=10
 kubectl autoscale deployment company-doorman --cpu-percent=50 --min=1 --max=10
 kubectl autoscale deployment company-manager --cpu-percent=50 --min=1 --max=10
-
+kubectl autoscale deployment company-beekeeper --cpu-percent=50 --min=1 --max=10

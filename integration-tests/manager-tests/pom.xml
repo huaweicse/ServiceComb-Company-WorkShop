@@ -41,23 +41,109 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <!-- mixin plugin configurations declared in another pom,
-      just like importing dependencies managed in another pom -->
-      <plugin>
-        <groupId>com.github.odavid.maven.plugins</groupId>
-        <artifactId>mixin-maven-plugin</artifactId>
-        <configuration>
-          <mixins>
-            <mixin>
-              <groupId>io.servicecomb.workshop.demo</groupId>
-              <artifactId>docker-run-config</artifactId>
-              <version>0.0.1-SNAPSHOT</version>
-            </mixin>
-          </mixins>
-        </configuration>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>io.fabric8</groupId>
+          <artifactId>docker-maven-plugin</artifactId>
+          <configuration>
+            <images>
+              <image>
+                <name>mysql/mysql-server:5.7</name>
+                <alias>mysql</alias>
+                <run>
+                  <env>
+                    <MYSQL_ROOT_PASSWORD>password</MYSQL_ROOT_PASSWORD>
+                    <MYSQL_DATABASE>company</MYSQL_DATABASE>
+                    <MYSQL_USER>company</MYSQL_USER>
+                    <MYSQL_PASSWORD>password</MYSQL_PASSWORD>
+                  </env>
+                  <wait>
+                    <log>Starting MySQL 5.7</log>
+                    <tcp>
+                      <ports>
+                        <port>3306</port>
+                      </ports>
+                    </tcp>
+                    <time>60000</time>
+                  </wait>
+                  <ports>
+                    <port>mysql.port:3306</port>
+                  </ports>
+                </run>
+              </image>
+              <image>
+                <name>servicecomb/service-center</name>
+                <alias>service-center</alias>
+                <run>
+                  <wait>
+                    <log>listen on server</log>
+                    <time>60000</time>
+                  </wait>
+                  <ports>
+                    <port>service.center.port:30100</port>
+                  </ports>
+                </run>
+              </image>
+              <image>
+                <name>${demo.service.name}:${project.version}</name>
+                <alias>${demo.service.name}</alias>
+                <run>
+                  <env>
+                    <JAVA_OPTS>
+                      -Dspring.profiles.active=prd -Dcse.service.publishAddress=${docker.hostname} ${demo.vm.options}
+                    </JAVA_OPTS>
+                    <ARTIFACT_ID>${demo.service.name}</ARTIFACT_ID>
+                  </env>
+                  <links>
+                    <link>service-center:sc.servicecomb.io</link>
+                    <link>mysql:mysql.servicecomb.io</link>
+                  </links>
+                  <wait>
+                    <log>Register microservice instance success</log>
+                    <!--
+                        the log waiting of the plugin has a bug and fails frequently
+                        refer to https://github.com/fabric8io/docker-maven-plugin/issues/767
+                        this http checking is used as a temporary solution
+                    -->
+                    <tcp>
+                      <ports>
+                        <port>8080</port>
+                      </ports>
+                    </tcp>
+                    <time>120000</time>
+                  </wait>
+                  <ports>
+                    <port>8080:8080</port>
+                  </ports>
+                  <dependsOn>
+                    <dependsOn>service-center</dependsOn>
+                    <dependsOn>mysql</dependsOn>
+                  </dependsOn>
+                </run>
+              </image>
+            </images>
+          </configuration>
+          <executions>
+            <execution>
+              <id>start</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>start</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>stop</id>
+              <phase>post-integration-test</phase>
+              <goals>
+                <goal>stop</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
   </build>
 
   <profiles>

@@ -1,2 +1,18 @@
 server:
   port: 0
+
+spring:
+  profiles: prd
+  datasource:
+    username: company
+    password: password
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://mysql.servicecomb.io:3306/company
+    platform: mysql
+    continue-on-error: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: none

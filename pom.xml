@@ -32,6 +32,7 @@
     <module>docker-build-config</module>
     <module>docker-run-config</module>
     <module>integration-tests</module>
+    <module>coverage-aggregate</module>
   </modules>
 
   <packaging>pom</packaging>
@@ -232,7 +233,7 @@
           <configuration>
             <jacocoReports>
               <jacocoReport>
-                ${project.basedir}/integration-tests/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
+                ${project.basedir}/coverage-aggregate/target/site/jacoco-aggregate/jacoco.xml
               </jacocoReport>
             </jacocoReports>
           </configuration>

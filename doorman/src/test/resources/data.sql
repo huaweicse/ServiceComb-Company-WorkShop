@@ -7,4 +7,4 @@ CREATE TABLE user_entity (
   last_accessed_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 );
 
-insert into user_entity(username, password) values('jordan', 'password')
+insert into user_entity(username, password) values('jordan', 'password');

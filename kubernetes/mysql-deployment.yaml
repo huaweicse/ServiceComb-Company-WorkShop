@@ -17,8 +17,8 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: company-doorman
-  name: company-doorman
+    io.kompose.service: company-mysql
+  name: company-mysql
 spec:
   replicas: 1
   strategy: {}
@@ -26,19 +26,23 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: company-doorman
+        io.kompose.service: company-mysql
     spec:
       containers:
-      - env:
-        - name: ARTIFACT_ID
-          value: doorman
-        - name: JAVA_OPTS
-          value: -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411 -Dspring.profiles.active=prd -Dspring.datasource.url=jdbc:mysql://company-mysql:3306/company
-        image: servicecomb/doorman:0.0.1-SNAPSHOT
-        name: company-doorman
+      - image: mysql/mysql-server:5.7
+        name: company-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+        - name: MYSQL_DATABASE
+          value: "company"
+        - name: MYSQL_USER
+          value: "company"
+        - name: MYSQL_PASSWORD
+          value: "password"
         ports:
-        - containerPort: 8080
-        resources: 
+        - containerPort: 3306
+        resources:
           requests:
             cpu: 200m
       restartPolicy: Always

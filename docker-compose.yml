@@ -1,4 +1,4 @@
-version: '2.0'
+version: '2.1'
 
 services:
   zipkin:
@@ -11,6 +11,22 @@ services:
     hostname: service-center
     ports:
       - "30100:30100"
+
+  mysql:
+    image: "mysql/mysql-server:5.7"
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=company
+      - MYSQL_USER=company
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 3306 &> /dev/null; echo $$?"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   company-worker:
     image: "worker:0.0.1-SNAPSHOT"
@@ -29,9 +45,14 @@ services:
     hostname: doorman
     links:
       - "company-bulletin-board:sc.servicecomb.io"
+      - "mysql:mysql.servicecomb.io"
       - "zipkin:zipkin.io"
     environment:
+      - JAVA_OPTS=-Dspring.profiles.active=prd
       - ARTIFACT_ID=doorman
+    depends_on:
+      mysql:
+        condition: service_healthy
     ports:
       - "8081:8080"
 

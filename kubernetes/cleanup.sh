@@ -16,6 +16,9 @@
 kubectl delete -f zipkin-service.yaml
 kubectl delete -f zipkin-deployment.yaml
 
+kubectl delete -f mysql-service.yaml
+kubectl delete -f mysql-deployment.yaml
+
 kubectl delete -f company-bulletin-board-service.yaml 
 kubectl delete -f company-bulletin-board-deployment.yaml 
 

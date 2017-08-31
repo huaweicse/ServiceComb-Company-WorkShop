@@ -23,6 +23,7 @@ You will need:
 4. [Docker compose(optional)][docker_compose]
 5. [Docker machine(optional)][docker_machine]
 6. [curl][curl]
+7. [MySQL][mysql]
 
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven]: https://maven.apache.org/install.html
@@ -30,6 +31,7 @@ You will need:
 [docker_compose]: https://docs.docker.com/compose/install/
 [docker_machine]: https://docs.docker.com/machine/install-machine/
 [curl]: https://curl.haxx.se
+[mysql]: https://dev.mysql.com/downloads/
 
 ## Run Services
 A `docker-compose.yaml` file is provided to start all services and their dependencies as docker containers.

@@ -10,7 +10,7 @@
 # PASSWORD=xxxxxxx                                                      # ---------password to login huawei cloud images repository.
 
 # PROJECT_PATH=                                                         # ---------(optional) path to maven project.
-THIRD_PARTY_IMAGES=(openzipkin/zipkin:1)				# ---------(optional) third party images that published on Docker Hub.
+THIRD_PARTY_IMAGES=(openzipkin/zipkin:1,mysql/mysql-server:5.7)				# ---------(optional) third party images that published on Docker Hub.
 
 
 docker version | grep "1.11.2" > /dev/null

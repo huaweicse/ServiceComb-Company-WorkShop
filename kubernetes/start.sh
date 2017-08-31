@@ -16,6 +16,9 @@
 kubectl expose -f zipkin-service.yaml
 kubectl create -f zipkin-deployment.yaml
 
+kubectl expose -f mysql-service.yaml
+kubectl create -f mysql-deployment.yaml
+
 kubectl expose -f company-bulletin-board-service.yaml 
 kubectl create -f company-bulletin-board-deployment.yaml 
 

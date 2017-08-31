@@ -7,7 +7,7 @@ spring:
     username: company
     password: password
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://mysql.servicecomb.io:3306/company
+    url: jdbc:mysql://mysql.servicecomb.io:3306/company?useSSL=false
     platform: mysql
     continue-on-error: true
   jpa:

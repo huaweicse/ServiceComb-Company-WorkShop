@@ -13,10 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.servicecomb.company.auth;
 
-import org.springframework.data.repository.CrudRepository;
+package io.servicecomb.company.auth.domain;
 
-interface UserRepository extends CrudRepository<User, Long> {
-  User findByUsernameAndPassword(String username, String password);
+import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity(name = "user_entity")
+public class User {
+
+  @Id
+  private long id;
+  private String username;
+  private String password;
+  private Date lastAccessedTime;
+
+  User() {
+  }
+
+  public User(String username) {
+    this.username = username;
+    this.lastAccessedTime = new Date();
+  }
+
+  public String getUsername() {
+    return username;
+  }
 }

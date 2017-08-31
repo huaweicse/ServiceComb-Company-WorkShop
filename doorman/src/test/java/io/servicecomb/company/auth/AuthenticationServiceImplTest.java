@@ -21,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.servicecomb.company.auth.domain.User;
+import io.servicecomb.company.auth.domain.UserRepository;
 import org.junit.Test;
 
 public class AuthenticationServiceImplTest {

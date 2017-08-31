@@ -15,6 +15,9 @@
  */
 package io.servicecomb.company.auth;
 
+import io.servicecomb.company.auth.domain.User;
+import io.servicecomb.company.auth.domain.UserRepository;
+
 class AuthenticationServiceImpl implements AuthenticationService {
 
   private final TokenStore tokenStore;

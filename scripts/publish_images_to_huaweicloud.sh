@@ -10,7 +10,7 @@
 # PASSWORD=xxxxxxx                                                      # ---------password to login huawei cloud images repository.
 
 # PROJECT_PATH=                                                         # ---------(optional) path to maven project.
-THIRD_PARTY_IMAGES=(openzipkin/zipkin:1 mysql/mysql-server:5.7)				# ---------(optional) third party images that published on Docker Hub, delimited with space
+THIRD_PARTY_IMAGES=(openzipkin/zipkin:1 mysql/mysql-server:5.7)		# ---------(optional) third party images that published on Docker Hub, delimited with space
 
 
 docker version | grep "1.11.2" > /dev/null
@@ -119,6 +119,7 @@ mvn clean package -DskipTests -DskipITs -PHuaweiCloud -Pdocker
 echo "Tagging image versions"
 for module in ${modules[@]}; do
     docker tag $module:$PROJECT_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/$module:$TARGET_VERSION
+    docker tag $module:$PROJECT_VERSION ${REPO_ADDRESS}/${TENANT_NAME}/$module:latest
 done
 
 VALID_THIRD_PARTY_IMAGES=()
@@ -142,8 +143,9 @@ docker login -u ${USERNAME} -p ${PASSWORD} ${REPO_ADDRESS}
 echo "Pushing images to huawei docker repository"
 for module in ${modules[@]}; do
     docker push ${REPO_ADDRESS}/${TENANT_NAME}/$module:$TARGET_VERSION
+    docker push ${REPO_ADDRESS}/${TENANT_NAME}/$module:latest
 done
-for validImage in ${VALID_THIRD_PARTY_IMAGES}; do
+for validImage in ${VALID_THIRD_PARTY_IMAGES[@]}; do
     docker push ${validImage}
 done
 

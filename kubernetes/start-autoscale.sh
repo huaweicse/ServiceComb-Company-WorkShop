@@ -14,21 +14,8 @@
 # limitations under the License.
 
 
-kubectl expose -f zipkin-service.yaml
-kubectl create -f zipkin-deployment.yaml
-
-kubectl expose -f mysql-service.yaml
-kubectl create -f mysql-deployment.yaml
-
-kubectl expose -f company-bulletin-board-service.yaml 
-kubectl create -f company-bulletin-board-deployment.yaml 
-
-kubectl create -f company-worker-deployment.yaml 
-kubectl create -f company-doorman-deployment.yaml 
-kubectl create -f company-beekeeper-deployment.yaml 
-
-kubectl create -f company-manager-service.yaml 
-kubectl create -f company-manager-deployment.yaml 
+START_SCRIPT=$(cd $(dirname $0); pwd)/start.sh
+bash $START_SCRIPT
 
 #Create Horizontal Pod Autoscaler
 kubectl autoscale deployment zipkin --cpu-percent=50 --min=1 --max=10

@@ -67,7 +67,7 @@
                     <!--
                         the log waiting of the plugin has a bug and fails frequently
                         refer to https://github.com/fabric8io/docker-maven-plugin/issues/767
-                        this http checking is used as a temporary solution
+                        this tcp port checking is used as a temporary solution
                     -->
                     <tcp>
                       <ports>

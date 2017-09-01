@@ -19,7 +19,7 @@
   <Properties>
     <Property name="dir">../logs</Property>
     <Property name="filename">server.log</Property>
-    <Property name="cse_dir">/var/paas/cse/trace/workshop</Property>
+    <Property name="cse_dir">/var/paas/cse/trace/company</Property>
   </Properties>
   <Appenders>
     <Console name="stdout" target="SYSTEM_OUT">

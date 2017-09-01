@@ -337,7 +337,7 @@
         </dependency>
         <dependency>
           <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>cse-handler-tracing</artifactId>
+          <artifactId>cse-handler-tracing-apm</artifactId>
           <version>${cse.version}</version>
         </dependency>
         <dependency>

@@ -21,7 +21,7 @@
   <parent>
     <artifactId>company</artifactId>
     <groupId>io.servicecomb.workshop.demo</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -47,17 +47,17 @@
     <dependency>
       <groupId>io.servicecomb.workshop.demo</groupId>
       <artifactId>worker-tests</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.servicecomb.workshop.demo</groupId>
       <artifactId>beekeeper-tests</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.servicecomb.workshop.demo</groupId>
       <artifactId>manager-tests</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <profiles>

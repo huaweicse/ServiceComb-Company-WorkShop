@@ -29,7 +29,7 @@ services:
       retries: 5
 
   company-worker:
-    image: "worker:0.0.1-SNAPSHOT"
+    image: "worker:0.2.0-SNAPSHOT"
     hostname: worker
     links:
       - "company-bulletin-board:sc.servicecomb.io"
@@ -41,7 +41,7 @@ services:
       - "8080:8080"
 
   company-doorman:
-    image: "doorman:0.0.1-SNAPSHOT"
+    image: "doorman:0.2.0-SNAPSHOT"
     hostname: doorman
     links:
       - "company-bulletin-board:sc.servicecomb.io"
@@ -57,7 +57,7 @@ services:
       - "8081:8080"
 
   company-beekeeper:
-    image: "beekeeper:0.0.1-SNAPSHOT"
+    image: "beekeeper:0.2.0-SNAPSHOT"
     hostname: beekeeper
     links:
       - "company-bulletin-board:sc.servicecomb.io"
@@ -69,7 +69,7 @@ services:
       - "8082:8090"
 
   company-manager:
-    image: "manager:0.0.1-SNAPSHOT"
+    image: "manager:0.2.0-SNAPSHOT"
     hostname: manager
     links:
       - "company-bulletin-board:sc.servicecomb.io"

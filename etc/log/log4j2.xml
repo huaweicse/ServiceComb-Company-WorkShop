@@ -35,7 +35,7 @@
     </RollingFile>
     <RollingFile name="sla" filename="${cse_dir}/@project_name@_metrics.dat"
       filePattern="${cse_dir}/@project_name@/metrics-%d{MM-dd-yyyy}-%i.gz"
-      append="true" bufferedIO="false" bufferSize="0" immediateFlush="true">
+      append="true" bufferedIO="false" bufferSize="0" immediateFlush="false">
       <PatternLayout pattern="%m%n"/>
       <Policies>
         <SizeBasedTriggeringPolicy size="20 MB" />
@@ -43,7 +43,7 @@
     </RollingFile>
     <RollingFile name="talc" filename="${cse_dir}/@project_name@_talc.dat"
       filePattern="${cse_dir}/@project_name@/talc-%d{MM-dd-yyyy}-%i.gz"
-      append="true" bufferedIO="false" bufferSize="0" immediateFlush="true">
+      append="true" bufferedIO="false" bufferSize="0" immediateFlush="false">
       <PatternLayout pattern="%m%n"/>
       <Policies>
         <SizeBasedTriggeringPolicy size="20 MB" />
@@ -51,17 +51,17 @@
     </RollingFile>
   </Appenders>
   <Loggers>
-    <Root level="info">
+    <asyncRoot level="info">
       <AppenderRef ref="stdout"/>
       <AppenderRef ref="paas"/>
-    </Root>
-    <Logger name="com.huawei.paas.cse.sla.fileslasender"
+    </asyncRoot>
+    <AsyncLogger name="com.huawei.paas.cse.sla.fileslasender"
       level="error" additivity="false">
       <AppenderRef ref="sla"/>
-    </Logger>
-    <Logger name="com.huawei.paas.cse.tracing.filespansender"
+    </AsyncLogger>
+    <AsyncLogger name="com.huawei.paas.cse.tracing.filespansender"
       level="error" additivity="false">
       <AppenderRef ref="talc"/>
-    </Logger>
+    </AsyncLogger>
   </Loggers>
 </Configuration>

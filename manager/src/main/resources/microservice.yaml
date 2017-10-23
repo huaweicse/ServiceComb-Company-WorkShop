@@ -15,12 +15,6 @@ cse:
       timeoutInMilliseconds: 30000
     worker:
       timeoutInMilliseconds: 30000
-  handler:
-    chain:
-      Provider:
-        default: tracing-provider
-      Consumer:
-        default: tracing-consumer,loadbalance
 
 servicecomb:
   tracing:

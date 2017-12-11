@@ -326,42 +326,15 @@
       <dependencies>
         <dependency>
           <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>foundation-auth</artifactId>
-          <version>${cse.version}</version>
-          <exclusions>
-            <exclusion>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-log4j12</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>foundation-config-cc</artifactId>
-          <version>${cse.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>cse-handler-tracing-apm</artifactId>
-          <version>${cse.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>cse-handler-performance-stats</artifactId>
-          <version>${cse.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.huawei.paas.cse</groupId>
-          <artifactId>cse-handler-cloud-extension</artifactId>
-          <version>${cse.version}</version>
+          <artifactId>cse-solution-service-engine</artifactId>
+          <version>2.2.7</version>
         </dependency>
       </dependencies>
-
       <repositories>
         <repository>
           <id>huawei_cloud_cse_dependencies</id>
           <name>huawei_cloud_cse_dependencies</name>
-          <url>http://cse.servicecomb.io/maven</url>
+          <url>http://maven.huaweicse.cn/nexus/content/groups/public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -374,7 +347,7 @@
         <pluginRepository>
           <id>huawei_cloud_cse_dependencies</id>
           <name>huawei_cloud_cse_dependencies</name>
-          <url>http://cse.servicecomb.io/maven</url>
+          <url>http://maven.huaweicse.cn/nexus/content/groups/public/</url>
           <releases>
             <enabled>true</enabled>
           </releases>

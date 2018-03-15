@@ -20,7 +20,7 @@
   <parent>
     <artifactId>company</artifactId>
     <groupId>org.apache.servicecomb.workshop.demo</groupId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -117,7 +117,7 @@
             <mixin>
               <groupId>org.apache.servicecomb.workshop.demo</groupId>
               <artifactId>docker-build-config</artifactId>
-              <version>0.4.0-SNAPSHOT</version>
+              <version>1.0.0-SNAPSHOT</version>
             </mixin>
           </mixins>
         </configuration>

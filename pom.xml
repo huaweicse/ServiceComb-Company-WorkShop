@@ -20,9 +20,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.servicecomb.workshop.demo</groupId>
+  <groupId>org.apache.servicecomb.workshop.demo</groupId>
   <artifactId>company</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
 
   <modules>
     <module>manager</module>
@@ -52,7 +52,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <pact.version>3.2.13</pact.version>
-    <java-chassis.version>0.3.0</java-chassis.version>
+    <java-chassis.version>1.0.0-m1</java-chassis.version>
     <cse.version>2.1.14</cse.version>
   </properties>
 
@@ -66,31 +66,31 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb</groupId>
+        <groupId>org.apache.servicecomb</groupId>
         <artifactId>java-chassis-dependencies</artifactId>
         <version>${java-chassis.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.workshop.demo</groupId>
+        <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>worker</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.workshop.demo</groupId>
+        <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>doorman</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.workshop.demo</groupId>
+        <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>beekeeper</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>io.servicecomb.workshop.demo</groupId>
+        <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>manager</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

@@ -20,8 +20,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>company</artifactId>
-    <groupId>io.servicecomb.workshop.demo</groupId>
-    <version>0.3.0-SNAPSHOT</version>
+    <groupId>org.apache.servicecomb.workshop.demo</groupId>
+    <version>0.4.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -55,15 +55,15 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.servicecomb</groupId>
+      <groupId>org.apache.servicecomb</groupId>
       <artifactId>spring-boot-starter-servicecomb</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.servicecomb</groupId>
+      <groupId>org.apache.servicecomb</groupId>
       <artifactId>spring-boot-starter-discovery</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.servicecomb</groupId>
+      <groupId>org.apache.servicecomb</groupId>
       <artifactId>spring-cloud-zuul-zipkin</artifactId>
     </dependency>
     <dependency>
@@ -120,9 +120,9 @@
         <configuration>
           <mixins>
             <mixin>
-              <groupId>io.servicecomb.workshop.demo</groupId>
+              <groupId>org.apache.servicecomb.workshop.demo</groupId>
               <artifactId>docker-build-config</artifactId>
-              <version>0.3.0-SNAPSHOT</version>
+              <version>0.4.0-SNAPSHOT</version>
             </mixin>
           </mixins>
         </configuration>

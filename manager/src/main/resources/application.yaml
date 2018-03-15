@@ -36,6 +36,10 @@ logging:
   level:
     root: INFO
 
+servicecomb:
+  discoveryClient:
+    enabled: false
+
 zuul:
   routes:
     doorman:

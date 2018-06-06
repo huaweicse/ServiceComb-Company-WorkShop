@@ -34,7 +34,7 @@ spec:
           value: doorman
         - name: JAVA_OPTS
           value: -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411 -Dspring.profiles.active=prd -Dspring.datasource.url=jdbc:mysql://company-mysql:3306/company
-        image: servicecomb/doorman:0.0.1-SNAPSHOT
+        image: servicecomb/doorman:1.0.0-SNAPSHOT
         name: company-doorman
         ports:
         - containerPort: 8080

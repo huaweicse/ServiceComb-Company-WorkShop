@@ -43,7 +43,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("dev")
 public class AuthenticationServiceTest {
   @ClassRule
-  public static final WireMockRule wireMockRule = new WireMockRule(wireMockConfig().dynamicPort());
+  public static final WireMockRule wireMockRule = new WireMockRule(8082);
 
   private final String username = Randomness.uniquify("username");
   private final String token = Randomness.uniquify("token");

@@ -20,16 +20,19 @@ import static com.netflix.zuul.constants.ZuulConstants.ZUUL_INITIAL_STREAM_BUFFE
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.servicecomb.company.manager.archive.ProjectArchive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.netflix.config.DynamicIntProperty;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.apache.servicecomb.company.manager.archive.ProjectArchive;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Post {@link ZuulFilter} to update cache entry with response body from remote service.
@@ -37,10 +40,13 @@ import org.slf4j.LoggerFactory;
 abstract class CacheUpdateFilter extends ZuulFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(CacheUpdateFilter.class);
+
   private static final DynamicIntProperty STREAM_BUFFER_SIZE = DynamicPropertyFactory
       .getInstance()
       .getIntProperty(ZUUL_INITIAL_STREAM_BUFFER_SIZE, 8192);
+
   private final ProjectArchive<String, String> archive;
+
   private final PathExtractor pathExtractor;
 
   CacheUpdateFilter(
@@ -95,10 +101,10 @@ abstract class CacheUpdateFilter extends ZuulFilter {
   }
 
   private String responseBody(RequestContext context) throws IOException {
-    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(STREAM_BUFFER_SIZE.get())) {
-      IOUtils.copy(context.getResponseDataStream(), outputStream);
-      context.setResponseBody(outputStream.toString());
-      return outputStream.toString();
-    }
+    InputStream stream = context.getResponseGZipped() ? new GZIPInputStream(context.getResponseDataStream())
+        : context.getResponseDataStream();
+    String body = new String(IOUtils.toByteArray(stream), "utf-8");
+    context.setResponseBody(body);
+    return body;
   }
 }

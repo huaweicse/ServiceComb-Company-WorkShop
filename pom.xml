@@ -43,7 +43,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.4.5.RELEASE</version>
+    <version>1.5.12.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -52,7 +52,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <pact.version>3.2.13</pact.version>
-    <java-chassis.version>1.0.0-m1</java-chassis.version>
+    <java-chassis.version>1.0.0-m2-SNAPSHOT</java-chassis.version>
     <cse.version>2.1.14</cse.version>
   </properties>
 
@@ -61,7 +61,7 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>Camden.SR6</version>
+        <version>Edgware.SR3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

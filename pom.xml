@@ -22,7 +22,7 @@
 
   <groupId>org.apache.servicecomb.workshop.demo</groupId>
   <artifactId>company</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-m1</version>
 
   <modules>
     <module>manager</module>
@@ -75,22 +75,22 @@
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>worker</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-m1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>doorman</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-m1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>beekeeper</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-m1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>manager</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-m1</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

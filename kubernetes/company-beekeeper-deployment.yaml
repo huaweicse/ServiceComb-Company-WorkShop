@@ -34,7 +34,7 @@ spec:
           value: beekeeper
         - name: JAVA_OPTS
           value: -Dcse.service.registry.address=http://company-bulletin-board:30100 -Dservicecomb.tracing.collector.adress=http://zipkin:9411
-        image: servicecomb/beekeeper:1.0.0-SNAPSHOT
+        image: servicecomb/beekeeper:1.0.0-m1
         name: company-beekeeper
         ports:
         - containerPort: 8090

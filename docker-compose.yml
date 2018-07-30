@@ -75,7 +75,7 @@ services:
       - "company-bulletin-board:sc.servicecomb.io"
       - "zipkin:zipkin.io"
     environment:
-      - JAVA_OPTS=-Dserver.port=8080 #-Dlogging.level.root=DEBUG
+      - JAVA_OPTS=-Dserver.port=8080 -Dspring.profiles.active=prd #-Dlogging.level.root=DEBUG
       - ARTIFACT_ID=manager
     ports:
       - "8083:8080"

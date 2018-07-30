@@ -37,7 +37,6 @@ services:
     environment:
       - ARTIFACT_ID=worker
     ports:
-      - "7070:7070"
       - "8080:8080"
 
   company-doorman:

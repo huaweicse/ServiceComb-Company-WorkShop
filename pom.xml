@@ -22,7 +22,7 @@
 
   <groupId>org.apache.servicecomb.workshop.demo</groupId>
   <artifactId>company</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <modules>
     <module>manager</module>
@@ -52,7 +52,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <pact.version>3.2.13</pact.version>
-    <java-chassis.version>1.0.0-m2</java-chassis.version>
+    <java-chassis.version>1.0.0</java-chassis.version>
     <cse.version>2.1.14</cse.version>
   </properties>
 
@@ -75,22 +75,22 @@
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>worker</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>doorman</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>beekeeper</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicecomb.workshop.demo</groupId>
         <artifactId>manager</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
